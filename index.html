@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giorizz Luxury Mobility</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #050505; color: white; font-family: 'Arial', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+        .sidebar { width: 260px; background: #0a0a0a; border-right: 1px solid #1f1f1f; padding: 30px; display: flex; flex-direction: column; }
+        .logo { font-size: 24px; letter-spacing: 2px; font-weight: bold; margin-bottom: 50px; color: #fff; }
+        .logo span { color: #004D40; }
+        .menu-item { padding: 15px 0; color: #888; cursor: pointer; transition: 0.3s; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .menu-item:hover, .menu-item.active { color: #004D40; font-weight: bold; padding-left: 10px; border-left: 2px solid #004D40; }
+        .main { flex: 1; padding: 50px; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
+        .status { background: #004D40; color: white; padding: 5px 15px; border-radius: 50px; font-size: 12px; text-transform: uppercase; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .card { background: #0f0f0f; papping: 30px; border: 1px solid #1f1f1f; border-radius: 8px; padding: 30px; }
+        .card h3 { color: #666; font-size: 12px; text-transform: uppercase; margin: 0 0 10px 0; }
+        .card .number { font-size: 36px; font-weight: 300; }
+        .btn-action { margin-top: 20px; background: transparent; border: 1px solid #004D40; color: #004D40; padding: 10px 20px; cursor: pointer; transition: 0.3s; }
+        .btn-action:hover { background: #004D40; color: white; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">GIORIZZ<span>.</span></div>
+        <div class="menu-item active">Dashboard</div>
+        <div class="menu-item">Prenotazioni</div>
+        <div class="menu-item">Flotta (Classe S)</div>
+        <div class="menu-item">Drivers</div>
+        <div class="menu-item">Impostazioni</div>
+    </div>
+    <div class="main">
+        <div class="header">
+            <h1>Panoramica Operativa</h1>
+            <div class="status">Sistema Online</div>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <h3>Prenotazioni Oggi</h3>
+                <div class="number">0</div>
+                <button class="btn-action">Vedi dettagli</button>
+            </div>
+            <div class="card">
+                <h3>Flotta Attiva</h3>
+                <div class="number">3</div>
+                <div style="font-size: 12px; color: #444; margin-top: 10px;">Classe S • Classe E • Van</div>
+            </div>
+            <div class="card">
+                <h3>Stato Connessione</h3>
+                <div class="number" style="color: #004D40;">Attivo</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
