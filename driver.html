@@ -3,47 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Giorizz Driver</title>
+    <title>Giorizz Driver App</title>
     <style>
-        /* Stile "Mobile Native" per Autisti */
+        /* BASE & RESET */
         body {
             background-color: #000000;
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            height: 90vh;
+            height: 95vh;
         }
 
-        /* Status Header */
+        /* HEADER STATO */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #222;
+            margin-bottom: 20px;
         }
 
-        .driver-info h2 { margin: 0; font-size: 18px; }
-        .driver-info span { font-size: 12px; color: #888; text-transform: uppercase; }
+        .driver-id { font-size: 14px; color: #888; }
+        .driver-id span { color: #fff; font-weight: bold; }
 
-        /* Tasto ON/OFF Servizio */
-        .status-toggle {
+        .status-btn {
             background: #1a1a1a;
-            border: 1px solid #333;
             color: #fff;
-            padding: 8px 16px;
-            border-radius: 20px;
+            border: 1px solid #333;
+            padding: 8px 20px;
+            border-radius: 50px;
             font-size: 12px;
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
+            transition: 0.3s;
         }
-        .status-toggle.online { background: #004D40; border-color: #004D40; }
+        .status-btn.online {
+            background: #004D40;
+            border-color: #004D40;
+            box-shadow: 0 0 10px rgba(0, 77, 64, 0.5);
+        }
 
-        /* Area Notifiche Lavoro */
-        .work-area {
+        /* AREA DI LAVORO */
+        .workspace {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -51,120 +58,232 @@
             align-items: center;
         }
 
-        .no-jobs { color: #555; font-size: 14px; text-align: center; }
+        .waiting-msg {
+            color: #444;
+            text-align: center;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
-        /* Card Chiamata in Arrivo (Simulazione) */
+        /* CARD RICHIESTA CORSA */
         .job-card {
             background: #111;
-            border: 1px solid #004D40;
-            border-radius: 12px;
-            padding: 20px;
+            border: 1px solid #333;
+            border-left: 4px solid #004D40; /* Verde Giorizz */
+            border-radius: 8px;
             width: 100%;
-            box-sizing: border-box;
-            display: none; /* Nascosto finché non arriva chiamata */
-            animation: slideUp 0.3s ease-out;
+            max-width: 400px;
+            padding: 0;
+            overflow: hidden;
+            display: none; /* Nascosto di default */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .job-route { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
-        .job-details { color: #aaa; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+        /* HEADER CARD: VEICOLO E PREZZO */
+        .job-header {
+            background: #1a1a1a;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222;
+        }
         
-        .actions { display: flex; gap: 10px; }
+        .vehicle-badge {
+            background: #333;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .vehicle-badge.business { color: #fff; border: 1px solid #fff; }
+        .vehicle-badge.van { color: #D4AF37; border: 1px solid #D4AF37; } /* Oro per Van */
+
+        .job-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #004D40; /* Verde Giorizz */
+        }
+
+        /* CORPO CARD: DETTAGLI */
+        .job-body { padding: 20px; }
+
+        .route-point {
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            margin-top: 5px; margin-right: 15px; flex-shrink: 0;
+        }
+        .dot.pickup { background: #fff; }
+        .dot.dropoff { background: #004D40; }
         
+        /* Linea di connessione punti */
+        .line {
+            position: absolute; left: 4px; top: 15px; bottom: -15px;
+            width: 2px; background: #333;
+        }
+        .route-point:last-child .line { display: none; }
+
+        .address-info h4 { margin: 0 0 5px 0; font-size: 16px; color: #fff; }
+        .address-info p { margin: 0; font-size: 12px; color: #888; }
+        .time { font-size: 12px; color: #D4AF37; font-weight: bold; margin-bottom: 2px; display: block; }
+
+        /* GRIGLIA INFO EXTRA (Pax, Bagagli, Km) */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #222;
+        }
+        .info-item { text-align: center; }
+        .info-item .label { font-size: 9px; color: #666; text-transform: uppercase; display: block; margin-bottom: 4px; }
+        .info-item .value { font-size: 14px; font-weight: bold; color: #eee; }
+
+        /* BOTTONI AZIONE */
+        .job-actions {
+            display: flex;
+            border-top: 1px solid #333;
+        }
         .btn {
             flex: 1;
-            padding: 15px;
+            padding: 20px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
+            text-transform: uppercase;
             cursor: pointer;
         }
-        .btn-accept { background: #004D40; color: white; }
-        .btn-decline { background: #333; color: white; }
+        .btn-reject { background: #111; color: #666; }
+        .btn-accept { background: #004D40; color: #fff; }
+        
+        .btn-reject:active { background: #222; }
+        .btn-accept:active { background: #00695C; }
 
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        /* Simulazione Integrazione API */
-        .api-status {
-            font-size: 10px;
-            color: #333;
-            text-align: center;
-            margin-top: auto;
-        }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="driver-info">
-            <h2>GIORIZZ DRIVER</h2>
-            <span>ID: DRV-001 • Classe S</span>
-        </div>
-        <button class="status-toggle" id="toggleBtn" onclick="toggleStatus()">OFFLINE</button>
+        <div class="driver-id">ID: <span>DRV-007</span></div>
+        <button id="toggleBtn" class="status-btn" onclick="toggleOnline()">VAI ONLINE</button>
     </div>
 
-    <div class="work-area">
-        <div id="waitingMsg" class="no-jobs">Sei OFFLINE. Vai online per ricevere corse.</div>
-        
-        <div id="incomingJob" class="job-card">
-            <div style="color: #004D40; font-size: 12px; font-weight: bold; margin-bottom: 5px;">NUOVA RICHIESTA • LUXURY</div>
-            <div class="job-route">Milano Centro ➝ MXP T1</div>
-            <div class="job-details">
-                Cliente: Vip Client<br>
-                Orario: Immediato<br>
-                Tariffa: € 150,00
+    <div class="workspace">
+        <div id="statusMsg" class="waiting-msg">Sei OFFLINE.<br>Tocca in alto per iniziare il turno.</div>
+
+        <div id="jobCard" class="job-card">
+            
+            <div class="job-header">
+                <div class="vehicle-badge business">BUSINESS CLASS</div> 
+                <div class="job-price">€ 145,00</div>
             </div>
-            <div class="actions">
-                <button class="btn btn-decline" onclick="rejectJob()">RIFIUTA</button>
-                <button class="btn btn-accept" onclick="acceptJob()">ACCETTA</button>
+
+            <div class="job-body">
+                <div class="route-point">
+                    <div class="dot pickup"></div>
+                    <div class="line"></div>
+                    <div class="address-info">
+                        <span class="time">OGGI, 14:30</span>
+                        <h4>Grand Hotel et de Milan</h4>
+                        <p>Via Alessandro Manzoni, 29 - Milano</p>
+                    </div>
+                </div>
+
+                <div class="route-point">
+                    <div class="dot dropoff"></div>
+                    <div class="address-info">
+                        <span class="time">STIMATO: 15:15</span>
+                        <h4>Aeroporto Malpensa (MXP)</h4>
+                        <p>Terminal 1, Partenze - Porta 6</p>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Passeggeri</span>
+                        <span class="value">2 👤</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Bagagli</span>
+                        <span class="value">3 🧳</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Distanza</span>
+                        <span class="value">52 km</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Tempo</span>
+                        <span class="value">45 min</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-actions">
+                <button class="btn btn-reject" onclick="rejectJob()">Rifiuta</button>
+                <button class="btn btn-accept" onclick="acceptJob()">ACCETTA CORSA</button>
             </div>
         </div>
-    </div>
 
-    <div class="api-status">
-        Connected to Platform API
     </div>
 
     <script>
-        let isOnline = false;
-
-        // Funzione 1: Simulazione cambio stato (Questo invierà dati al TUO sito)
-        function toggleStatus() {
+        // SCRIPT DI SIMULAZIONE (In futuro sarà collegato alle API)
+        
+        function toggleOnline() {
             const btn = document.getElementById('toggleBtn');
-            const msg = document.getElementById('waitingMsg');
-            const jobCard = document.getElementById('incomingJob');
+            const msg = document.getElementById('statusMsg');
+            const card = document.getElementById('jobCard');
             
-            isOnline = !isOnline;
-            
-            if (isOnline) {
-                btn.textContent = "ONLINE";
+            if (btn.innerText === "VAI ONLINE") {
+                // Attivazione
+                btn.innerText = "ONLINE";
                 btn.classList.add('online');
-                msg.textContent = "In attesa di assegnazioni dal server...";
+                msg.innerHTML = "RICERCA CORSE IN CORSO...<br>Non chiudere l'app.";
                 
-                // SIMULAZIONE: Dopo 3 secondi il server manda una corsa
+                // SIMULAZIONE: Dopo 3 secondi arriva una chiamata
                 setTimeout(() => {
                     msg.style.display = 'none';
-                    jobCard.style.display = 'block';
-                    // In realtà qui ci sarà: fetch('tuosito.com/api/get-jobs')
+                    card.style.display = 'block';
+                    // Qui suonerà un audio di notifica
                 }, 3000);
+
             } else {
-                btn.textContent = "OFFLINE";
+                // Disattivazione
+                btn.innerText = "VAI ONLINE";
                 btn.classList.remove('online');
-                msg.textContent = "Sei OFFLINE. Vai online per ricevere corse.";
                 msg.style.display = 'block';
-                jobCard.style.display = 'none';
+                msg.innerHTML = "Sei OFFLINE.<br>Tocca in alto per iniziare il turno.";
+                card.style.display = 'none';
             }
         }
 
-        // Funzione 2: Accettazione Corsa (Invia conferma al TUO sito)
         function acceptJob() {
-            alert("Corsa accettata! Reindirizzamento al navigatore...");
-            // Qui ci sarà: fetch('tuosito.com/api/accept-job', { method: 'POST' })
+            const card = document.getElementById('jobCard');
+            card.innerHTML = `<div style="padding:40px; text-align:center; color:#004D40;">
+                <h3>CORSA ACCETTATA</h3>
+                <p style="color:#fff; font-size:12px;">Invio dati al navigatore...</p>
+                <br>✅
+            </div>`;
+            
+            // In futuro qui inviamo i dati a Google Maps / Waze
+            setTimeout(() => {
+                location.reload(); // Reset per demo
+            }, 2000);
         }
 
         function rejectJob() {
-            document.getElementById('incomingJob').style.display = 'none';
-            document.getElementById('waitingMsg').style.display = 'block';
+            document.getElementById('jobCard').style.display = 'none';
+            document.getElementById('statusMsg').style.display = 'block';
+            document.getElementById('statusMsg').innerText = "Corsa rifiutata. Ricerca in corso...";
         }
     </script>
 </body>
