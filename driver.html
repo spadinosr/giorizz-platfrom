@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Giorizz Driver</title>
+    <style>
+        /* Stile "Mobile Native" per Autisti */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+        }
+
+        /* Status Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+
+        .driver-info h2 { margin: 0; font-size: 18px; }
+        .driver-info span { font-size: 12px; color: #888; text-transform: uppercase; }
+
+        /* Tasto ON/OFF Servizio */
+        .status-toggle {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .status-toggle.online { background: #004D40; border-color: #004D40; }
+
+        /* Area Notifiche Lavoro */
+        .work-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .no-jobs { color: #555; font-size: 14px; text-align: center; }
+
+        /* Card Chiamata in Arrivo (Simulazione) */
+        .job-card {
+            background: #111;
+            border: 1px solid #004D40;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            display: none; /* Nascosto finché non arriva chiamata */
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .job-route { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+        .job-details { color: #aaa; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+        
+        .actions { display: flex; gap: 10px; }
+        
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-accept { background: #004D40; color: white; }
+        .btn-decline { background: #333; color: white; }
+
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Simulazione Integrazione API */
+        .api-status {
+            font-size: 10px;
+            color: #333;
+            text-align: center;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="driver-info">
+            <h2>GIORIZZ DRIVER</h2>
+            <span>ID: DRV-001 • Classe S</span>
+        </div>
+        <button class="status-toggle" id="toggleBtn" onclick="toggleStatus()">OFFLINE</button>
+    </div>
+
+    <div class="work-area">
+        <div id="waitingMsg" class="no-jobs">Sei OFFLINE. Vai online per ricevere corse.</div>
+        
+        <div id="incomingJob" class="job-card">
+            <div style="color: #004D40; font-size: 12px; font-weight: bold; margin-bottom: 5px;">NUOVA RICHIESTA • LUXURY</div>
+            <div class="job-route">Milano Centro ➝ MXP T1</div>
+            <div class="job-details">
+                Cliente: Vip Client<br>
+                Orario: Immediato<br>
+                Tariffa: € 150,00
+            </div>
+            <div class="actions">
+                <button class="btn btn-decline" onclick="rejectJob()">RIFIUTA</button>
+                <button class="btn btn-accept" onclick="acceptJob()">ACCETTA</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="api-status">
+        Connected to Platform API
+    </div>
+
+    <script>
+        let isOnline = false;
+
+        // Funzione 1: Simulazione cambio stato (Questo invierà dati al TUO sito)
+        function toggleStatus() {
+            const btn = document.getElementById('toggleBtn');
+            const msg = document.getElementById('waitingMsg');
+            const jobCard = document.getElementById('incomingJob');
+            
+            isOnline = !isOnline;
+            
+            if (isOnline) {
+                btn.textContent = "ONLINE";
+                btn.classList.add('online');
+                msg.textContent = "In attesa di assegnazioni dal server...";
+                
+                // SIMULAZIONE: Dopo 3 secondi il server manda una corsa
+                setTimeout(() => {
+                    msg.style.display = 'none';
+                    jobCard.style.display = 'block';
+                    // In realtà qui ci sarà: fetch('tuosito.com/api/get-jobs')
+                }, 3000);
+            } else {
+                btn.textContent = "OFFLINE";
+                btn.classList.remove('online');
+                msg.textContent = "Sei OFFLINE. Vai online per ricevere corse.";
+                msg.style.display = 'block';
+                jobCard.style.display = 'none';
+            }
+        }
+
+        // Funzione 2: Accettazione Corsa (Invia conferma al TUO sito)
+        function acceptJob() {
+            alert("Corsa accettata! Reindirizzamento al navigatore...");
+            // Qui ci sarà: fetch('tuosito.com/api/accept-job', { method: 'POST' })
+        }
+
+        function rejectJob() {
+            document.getElementById('incomingJob').style.display = 'none';
+            document.getElementById('waitingMsg').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
