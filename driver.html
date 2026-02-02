@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Giorizz Driver</title>
+    <title>Giorizz Driver Pro</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -50,7 +50,7 @@
             <i data-lucide="radar" class="w-12 h-12 text-giorizz-green"></i>
         </div>
         <h2 class="text-lg font-bold text-zinc-800">Ricerca Corse...</h2>
-        <p class="text-xs text-zinc-400 mt-2">Rimani in questa schermata.<br>La priorità è assegnata a te.</p>
+        <p class="text-xs text-zinc-400 mt-2">Priorità assegnata.<br>Rimani in attesa.</p>
     </div>
 
     <div id="offlineView" class="flex-1 flex flex-col items-center justify-center p-6 text-center">
@@ -58,48 +58,53 @@
             <i data-lucide="coffee" class="w-10 h-10 text-zinc-400"></i>
         </div>
         <h2 class="text-lg font-bold text-zinc-400">Sei Offline</h2>
-        <p class="text-xs text-zinc-400 mt-2">Vai Online per ricevere richieste.</p>
+        <p class="text-xs text-zinc-400 mt-2">Vai Online per lavorare.</p>
     </div>
 
     <div id="jobCard" class="hidden absolute inset-0 bg-white z-50 flex flex-col">
         <div class="bg-giorizz-green p-6 text-white pb-10">
             <div class="text-xs font-bold opacity-70 uppercase mb-1">Nuova Richiesta</div>
-            <div class="text-3xl font-bold">€ <span id="jobPrice">---</span></div>
+            <div class="text-3xl font-bold">€ <span id="offerPrice">---</span></div>
             <div class="flex gap-2 mt-4">
-                <span class="bg-white/20 px-2 py-1 rounded text-[10px] font-bold" id="jobVehicle">BUSINESS</span>
-                <span class="bg-white/20 px-2 py-1 rounded text-[10px] font-bold">VIP CLIENT</span>
+                <span class="bg-white/20 px-2 py-1 rounded text-[10px] font-bold" id="offerVehicle">---</span>
             </div>
         </div>
-        
         <div class="flex-1 p-6 -mt-6 bg-white rounded-t-3xl overflow-y-auto">
-            <div class="pl-4 border-l-2 border-zinc-100 space-y-8 relative">
+            <div class="pl-4 border-l-2 border-zinc-100 space-y-6 relative">
                 <div class="relative pl-6">
-                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-giorizz-green ring-4 ring-green-50"></div>
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-giorizz-green"></div>
                     <div class="text-xs font-bold text-zinc-400 mb-1">RITIRO</div>
-                    <div id="jobPickup" class="text-lg font-bold text-zinc-900 leading-tight">---</div>
+                    <div id="offerPickup" class="text-lg font-bold text-zinc-900 leading-tight">---</div>
                 </div>
                 <div class="relative pl-6">
                     <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-giorizz-gold"></div>
                     <div class="text-xs font-bold text-zinc-400 mb-1">DESTINAZIONE</div>
-                    <div id="jobDropoff" class="text-lg font-bold text-zinc-900 leading-tight">---</div>
-                </div>
-            </div>
-
-            <div class="mt-10 grid grid-cols-2 gap-4">
-                <div class="bg-zinc-50 p-4 rounded-xl text-center">
-                    <div class="text-xs text-zinc-400 font-bold uppercase">Distanza</div>
-                    <div class="font-bold text-zinc-800 mt-1">2.4 km</div>
-                </div>
-                <div class="bg-zinc-50 p-4 rounded-xl text-center">
-                    <div class="text-xs text-zinc-400 font-bold uppercase">Tempo</div>
-                    <div class="font-bold text-zinc-800 mt-1">8 min</div>
+                    <div id="offerDropoff" class="text-lg font-bold text-zinc-900 leading-tight">---</div>
                 </div>
             </div>
         </div>
-
         <div class="p-4 border-t border-zinc-100 flex gap-4">
-            <button onclick="rejectJob()" class="flex-1 py-4 rounded-xl font-bold text-zinc-400 bg-zinc-100">RIFIUTA</button>
+            <button onclick="rejectJob()" class="flex-1 py-4 rounded-xl font-bold text-zinc-400 bg-zinc-100">IGNORA</button>
             <button onclick="acceptJob()" class="flex-[2] py-4 rounded-xl font-bold text-white bg-giorizz-green shadow-xl pulse-ring">ACCETTA</button>
+        </div>
+    </div>
+
+    <div id="missionView" class="hidden absolute inset-0 bg-white z-40 flex flex-col">
+        <div class="p-6 pb-2">
+            <h1 class="text-2xl font-bold text-giorizz-green">Cliente VIP</h1>
+            <p class="text-zinc-500 text-sm font-medium mt-1" id="activeStatusLabel">In attesa...</p>
+        </div>
+        
+        <div class="flex-1 overflow-y-auto px-6 py-4">
+            <div class="pl-2 border-l-2 border-zinc-100 space-y-8 relative" id="missionTimeline">
+                </div>
+        </div>
+
+        <div class="bg-white border-t border-zinc-100 p-5 pb-8 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+            <button id="missionBtn" onclick="advanceMissionStep()" class="w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-giorizz-green">
+                <i id="btnIcon" data-lucide="navigation"></i>
+                <span id="btnText">CARICAMENTO...</span>
+            </button>
         </div>
     </div>
 
@@ -108,99 +113,158 @@
 <script>
     lucide.createIcons();
 
-    // --- I TUOI DATI VERI ---
+    // --- CONFIGURAZIONE ---
     const SUPABASE_URL = 'https://ysgebcbptgjlpbgnlcjt.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_vWLK2XVCNfki5wrkDEpBCQ_XCsjERhe';
-    
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // Variabili di Stato
     let isOnline = false;
-    let intervalId = null;
-    let currentJobId = null;
+    let searchInterval = null;
+    let activeJob = null; // Contiene tutti i dati della corsa (indirizzi, id, ecc.)
+    let missionStep = 0; // 0=NavPickup, 1=Arrived, 2=StartTrip, 3=NavDropoff, 4=Complete
 
+    // --- LOGICA ONLINE/OFFLINE ---
     function toggleOnline() {
         isOnline = !isOnline;
         const btn = document.getElementById('onlineBtn');
         const txt = document.getElementById('onlineText');
-        const offView = document.getElementById('offlineView');
-        const searchView = document.getElementById('searchingView');
-
+        
         if (isOnline) {
-            // GO ONLINE
-            btn.classList.remove('bg-zinc-100', 'text-zinc-500');
-            btn.classList.add('bg-emerald-100', 'text-emerald-700', 'border-emerald-200');
-            txt.innerText = "SEI ONLINE";
-            offView.style.display = 'none';
-            searchView.style.display = 'flex';
-            
-            // Inizia a cercare nel database ogni 2 secondi
+            btn.className = "flex items-center space-x-2 text-[10px] font-bold border px-4 py-2 rounded-full transition-all bg-emerald-100 text-emerald-700 border-emerald-200";
+            txt.innerText = "ONLINE";
+            document.getElementById('offlineView').style.display = 'none';
+            document.getElementById('searchingView').style.display = 'flex';
+            searchInterval = setInterval(checkForRides, 3000); // Cerca ogni 3 sec
             checkForRides();
-            intervalId = setInterval(checkForRides, 2000);
         } else {
-            // GO OFFLINE
-            btn.classList.add('bg-zinc-100', 'text-zinc-500');
-            btn.classList.remove('bg-emerald-100', 'text-emerald-700', 'border-emerald-200');
+            btn.className = "flex items-center space-x-2 text-[10px] font-bold border px-4 py-2 rounded-full transition-all bg-zinc-100 text-zinc-500";
             txt.innerText = "VAI ONLINE";
-            offView.style.display = 'flex';
-            searchView.style.display = 'none';
-            document.getElementById('jobCard').classList.add('hidden');
-            
-            clearInterval(intervalId);
+            document.getElementById('offlineView').style.display = 'flex';
+            document.getElementById('searchingView').style.display = 'none';
+            clearInterval(searchInterval);
         }
     }
 
+    // --- RICERCA LAVORO ---
     async function checkForRides() {
         if (!isOnline) return;
-
-        // CHIEDI AL DATABASE: "C'è qualcuno che aspetta?"
-        const { data, error } = await db
-            .from('bookings')
-            .select('*')
-            .eq('status', 'pending') // Solo corse in attesa
-            .limit(1); // Prendine una sola
-
+        // Cerca corse 'pending'
+        const { data } = await db.from('bookings').select('*').eq('status', 'pending').limit(1);
         if (data && data.length > 0) {
-            // TROVATA!
-            const job = data[0];
-            showJobCard(job);
+            showOffer(data[0]);
         }
     }
 
-    function showJobCard(job) {
-        clearInterval(intervalId); // Smetti di cercare mentre decidi
-        currentJobId = job.id;
-
-        // RIEMPI I DATI
-        document.getElementById('jobPrice').innerText = job.price;
-        document.getElementById('jobVehicle').innerText = job.vehicle_type.toUpperCase();
-        document.getElementById('jobPickup').innerText = job.pickup_address;
-        document.getElementById('jobDropoff').innerText = job.dropoff_address;
-
-        // MOSTRA LA SCHERMATA
-        document.getElementById('jobCard').classList.remove('hidden');
+    function showOffer(job) {
+        clearInterval(searchInterval); // Smetti di cercare
+        activeJob = job;
         
-        // VIBRAZIONE (Se su mobile)
+        // Riempi UI Offerta
+        document.getElementById('offerPrice').innerText = job.price;
+        document.getElementById('offerVehicle').innerText = job.vehicle_type.toUpperCase();
+        document.getElementById('offerPickup').innerText = job.pickup_address;
+        document.getElementById('offerDropoff').innerText = job.dropoff_address;
+        
+        document.getElementById('jobCard').classList.remove('hidden');
         if(navigator.vibrate) navigator.vibrate([500, 200, 500]);
-    }
-
-    async function acceptJob() {
-        // AGGIORNA DATABASE: "Presa!"
-        const { error } = await db
-            .from('bookings')
-            .update({ status: 'assigned' })
-            .eq('id', currentJobId);
-
-        if (!error) {
-            alert("CORSA ACCETTATA! ✅\nNavigazione avviata...");
-            // Qui in futuro metteremo la schermata di navigazione
-            document.getElementById('jobCard').innerHTML = '<div class="flex-1 flex items-center justify-center font-bold text-xl">BUON VIAGGIO! 🚗</div>';
-        }
     }
 
     function rejectJob() {
         document.getElementById('jobCard').classList.add('hidden');
-        // Ricomincia a cercare
-        intervalId = setInterval(checkForRides, 2000);
+        activeJob = null;
+        searchInterval = setInterval(checkForRides, 3000); // Ricomincia a cercare
+    }
+
+    // --- INIZIO MISSIONE ---
+    async function acceptJob() {
+        // Aggiorna DB: status -> assigned
+        const { error } = await db.from('bookings').update({ status: 'assigned' }).eq('id', activeJob.id);
+        
+        if (!error) {
+            document.getElementById('jobCard').classList.add('hidden');
+            document.getElementById('missionView').classList.remove('hidden');
+            missionStep = 0; // Si parte dal passo 0
+            updateMissionUI();
+        } else {
+            alert("Errore: Corsa già presa da un altro driver.");
+            rejectJob();
+        }
+    }
+
+    // --- GESTIONE STEP-BY-STEP ---
+    async function advanceMissionStep() {
+        // Logica del bottone principale
+        if (missionStep === 0) {
+            // NAVIGA AL RITIRO
+            openMaps(activeJob.pickup_address);
+            missionStep++; 
+        } 
+        else if (missionStep === 1) {
+            // ARRIVATO AL RITIRO
+            // Qui potremmo aggiornare lo stato DB a "arrived" se volessimo
+            missionStep++;
+        }
+        else if (missionStep === 2) {
+            // CLIENTE A BORDO -> INIZIA VIAGGIO
+            openMaps(activeJob.dropoff_address);
+            missionStep++;
+        }
+        else if (missionStep === 3) {
+            // CORSA FINITA -> SALVA SU DB
+            await db.from('bookings').update({ status: 'completed' }).eq('id', activeJob.id);
+            alert("Ottimo lavoro! Corsa completata. 💰");
+            location.reload(); // Ricarica per tornare alla ricerca
+            return; 
+        }
+        updateMissionUI();
+    }
+
+    function updateMissionUI() {
+        const btn = document.getElementById('missionBtn');
+        const btnText = document.getElementById('btnText');
+        const statusLabel = document.getElementById('activeStatusLabel');
+        const tl = document.getElementById('missionTimeline');
+
+        // Render Timeline con indirizzi veri
+        tl.innerHTML = `
+            <div class="relative pl-6 pb-8 border-l-2 ${missionStep > 1 ? 'border-giorizz-green' : 'border-zinc-100'}">
+                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full ${missionStep > 1 ? 'bg-giorizz-green' : 'bg-giorizz-green animate-pulse'}"></div>
+                <div class="text-xs font-bold text-zinc-400 mb-1">RITIRO</div>
+                <div class="text-sm font-bold text-zinc-900">${activeJob.pickup_address}</div>
+            </div>
+            <div class="relative pl-6">
+                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full ${missionStep >= 3 ? 'bg-giorizz-green' : 'bg-zinc-300'}"></div>
+                <div class="text-xs font-bold text-zinc-400 mb-1">DESTINAZIONE</div>
+                <div class="text-sm font-bold text-zinc-900">${activeJob.dropoff_address}</div>
+            </div>
+        `;
+
+        // Testi del Bottone
+        if(missionStep === 0) {
+            btnText.innerText = "NAVIGA AL RITIRO";
+            btn.className = "w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-giorizz-green pulse-ring";
+            statusLabel.innerText = "In viaggio verso il cliente";
+        } else if (missionStep === 1) {
+            btnText.innerText = "SONO ARRIVATO";
+            btn.className = "w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-zinc-800";
+            btn.classList.remove('pulse-ring');
+            statusLabel.innerText = "Arrivo al punto di ritiro";
+        } else if (missionStep === 2) {
+            btnText.innerText = "INIZIA VIAGGIO";
+            btn.className = "w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-giorizz-green";
+            statusLabel.innerText = "Cliente a bordo";
+        } else if (missionStep === 3) {
+            btnText.innerText = "COMPLETA CORSA";
+            btn.className = "w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-red-600";
+            statusLabel.innerText = "In viaggio verso destinazione";
+        }
+
+        lucide.createIcons();
+    }
+
+    function openMaps(addr) {
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}`, '_blank');
     }
 
 </script>
