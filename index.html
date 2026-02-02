@@ -6,52 +6,101 @@
     <title>Giorizz Luxury Hub</title>
     <style>
         body {
-            background-color: #000;
+            background-color: #050505;
             color: #fff;
-            font-family: sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-        }
-        .logo { font-size: 30px; font-weight: bold; letter-spacing: 3px; margin-bottom: 40px; text-transform: uppercase; }
-        .logo span { color: #004D40; }
-        
-        .btn-portal {
-            display: block;
-            width: 260px;
             padding: 20px;
-            margin: 10px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: 0.3s;
-            border: 1px solid #333;
-            text-transform: uppercase;
-            font-size: 13px;
-            letter-spacing: 1px;
-            font-weight: bold;
+            box-sizing: border-box;
         }
 
-        /* Colori differenziati per ruolo */
-        .client { background: #fff; color: #000; border: 1px solid #fff; } /* Bianco per Cliente */
-        .driver { background: #004D40; color: #fff; border: 1px solid #004D40; } /* Verde per Driver */
-        .admin { background: #111; color: #666; } /* Scuro per Admin */
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+        .logo span { color: #004D40; } /* Verde Giorizz */
+        
+        .menu-container {
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-        .footer { margin-top: 50px; font-size: 10px; color: #444; }
+        .btn-portal {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: transform 0.2s, opacity 0.2s;
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .btn-portal:active { transform: scale(0.98); }
+
+        /* 1. BOTTONE CLIENTE (Bianco/Luminoso) */
+        .client {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #ffffff;
+        }
+        .client:after { content: '➔'; position: absolute; right: 20px; }
+
+        /* 2. BOTTONE DRIVER (Verde Smeraldo) */
+        .driver {
+            background: #004D40;
+            color: #ffffff;
+            border: 1px solid #004D40;
+            box-shadow: 0 4px 15px rgba(0, 77, 64, 0.4);
+        }
+
+        /* 3. BOTTONE ADMIN (Scuro/Discreto) */
+        .admin {
+            background: transparent;
+            color: #666;
+            border: 1px solid #333;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding-top: 40px;
+            font-size: 10px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
 
     <div class="logo">GIORIZZ<span>.</span></div>
 
-    <a href="client.html" class="btn-portal client">PRENOTA (CLIENTE)</a>
-    <a href="driver.html" class="btn-portal driver">APP AUTISTA (DRIVER)</a>
-    <a href="admin.html" class="btn-portal admin">DASHBOARD (UFFICIO)</a>
+    <div class="menu-container">
+        <a href="client.html" class="btn-portal client">Prenota Corsa</a>
+        
+        <a href="driver.html" class="btn-portal driver">App Driver</a>
 
-    <div class="footer">Giorizz Luxury Mobility System</div>
+        <a href="admin.html" class="btn-portal admin">Accesso Amministrazione</a>
+    </div>
+
+    <div class="footer">Luxury Mobility Platform v1.0</div>
 
 </body>
 </html>
