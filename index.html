@@ -3,104 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giorizz Luxury Hub</title>
+    <title>Giorizz Mobility Ecosystem</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        giorizz: { green: '#00382B', gold: '#C5A065', black: '#050505' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            background-color: #050505;
-            color: #fff;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+        body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
         }
-
-        .logo {
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: 4px;
-            margin-bottom: 60px;
-            text-transform: uppercase;
-        }
-        .logo span { color: #004D40; } /* Verde Giorizz */
-        
-        .menu-container {
-            width: 100%;
-            max-width: 350px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .btn-portal {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-decoration: none;
-            border-radius: 12px;
-            transition: transform 0.2s, opacity 0.2s;
-            text-transform: uppercase;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            position: relative;
-        }
-
-        .btn-portal:active { transform: scale(0.98); }
-
-        /* 1. BOTTONE CLIENTE (Bianco/Luminoso) */
-        .client {
-            background: #ffffff;
-            color: #000000;
-            border: 1px solid #ffffff;
-        }
-        .client:after { content: '➔'; position: absolute; right: 20px; }
-
-        /* 2. BOTTONE DRIVER (Verde Smeraldo) */
-        .driver {
-            background: #004D40;
-            color: #ffffff;
-            border: 1px solid #004D40;
-            box-shadow: 0 4px 15px rgba(0, 77, 64, 0.4);
-        }
-
-        /* 3. BOTTONE ADMIN (Scuro/Discreto) */
-        .admin {
-            background: transparent;
-            color: #666;
-            border: 1px solid #333;
-            margin-top: 20px;
-            font-size: 12px;
-        }
-
-        .footer {
-            margin-top: auto;
-            padding-top: 40px;
-            font-size: 10px;
-            color: #333;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
 
-    <div class="logo">GIORIZZ<span>.</span></div>
-
-    <div class="menu-container">
-        <a href="client.html" class="btn-portal client">Prenota Corsa</a>
-        
-        <a href="driver.html" class="btn-portal driver">App Driver</a>
-
-        <a href="admin.html" class="btn-portal admin">Accesso Amministrazione</a>
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-giorizz-green opacity-20 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-giorizz-green opacity-10 rounded-full blur-[120px]"></div>
     </div>
 
-    <div class="footer">Luxury Mobility Platform v1.0</div>
+    <div class="text-center mb-12 animate-in fade-in slide-in-from-bottom duration-700">
+        <div class="inline-block mb-4 px-3 py-1 rounded-full border border-green-900 bg-green-900/20 text-green-400 text-[10px] font-bold tracking-widest uppercase">
+            System Online • v2.0
+        </div>
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-2">
+            GIORIZZ<span class="text-giorizz-gold">.</span>
+        </h1>
+        <p class="text-zinc-500 text-sm md:text-base tracking-wide uppercase">Luxury Mobility Platform</p>
+    </div>
 
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
+
+        <a href="client.html" class="group relative bg-white text-black p-8 rounded-2xl shadow-2xl hover:shadow-white/20 transition-all duration-300 transform hover:-translate-y-1">
+            <div class="absolute top-4 right-4 bg-black/5 p-2 rounded-full">
+                <i data-lucide="arrow-up-right" class="w-5 h-5 text-black"></i>
+            </div>
+            <div class="mb-6 bg-black/5 w-14 h-14 rounded-full flex items-center justify-center">
+                <i data-lucide="smartphone" class="w-7 h-7 text-black"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Prenota Corsa</h2>
+            <p class="text-sm text-zinc-600 font-medium">Accesso Clienti VIP</p>
+            <div class="mt-6 flex items-center text-xs font-bold uppercase tracking-wider text-black">
+                Entra <i data-lucide="chevron-right" class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1"></i>
+            </div>
+        </a>
+
+        <a href="driver.html" class="group glass-card p-8 rounded-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                <i data-lucide="steering-wheel" class="w-24 h-24"></i>
+            </div>
+            <div class="mb-6 bg-giorizz-green/20 w-14 h-14 rounded-full flex items-center justify-center border border-giorizz-green/30">
+                <i data-lucide="car" class="w-7 h-7 text-emerald-400"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2 text-white">Driver App</h2>
+            <p class="text-sm text-zinc-400">Portale Autisti & Flotta</p>
+            <div class="mt-6 flex items-center text-xs font-bold uppercase tracking-wider text-emerald-400">
+                Accesso Partner <i data-lucide="chevron-right" class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1"></i>
+            </div>
+        </a>
+
+        <a href="admin.html" class="group glass-card p-8 rounded-2xl border-zinc-800">
+            <div class="mb-6 bg-zinc-800/50 w-14 h-14 rounded-full flex items-center justify-center border border-zinc-700">
+                <i data-lucide="layout-dashboard" class="w-7 h-7 text-zinc-400"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2 text-white">HQ Admin</h2>
+            <p class="text-sm text-zinc-500">Control Room & Dispatch</p>
+            <div class="mt-6 flex items-center text-xs font-bold uppercase tracking-wider text-zinc-500 group-hover:text-white transition-colors">
+                Gestione <i data-lucide="lock" class="w-3 h-3 ml-2"></i>
+            </div>
+        </a>
+
+    </div>
+
+    <div class="mt-16 text-center">
+        <div class="flex items-center justify-center gap-6 mb-4 opacity-30">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+            <i data-lucide="globe" class="w-5 h-5"></i>
+            <i data-lucide="wifi" class="w-5 h-5"></i>
+        </div>
+        <p class="text-[10px] text-zinc-600 uppercase tracking-[0.2em]">
+            Giorizz Luxury Mobility System © 2026
+        </p>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
