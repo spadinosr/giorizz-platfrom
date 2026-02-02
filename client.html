@@ -3,138 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Prenota Giorizz</title>
+    <title>Giorizz Client</title>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
+        /* --- STILE LUXURY SYSTEM --- */
+        :root {
+            --g-green: #00382B;
+            --g-gold: #C5A065;
+            --g-bg: #F4F4F5; /* zinc-100 */
+            --white: #ffffff;
+            --text-main: #18181b;
+            --text-muted: #a1a1aa;
+        }
+
         body {
-            background-color: #000;
-            color: #fff;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--g-bg);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            padding: 20px;
-            padding-bottom: 100px;
-        }
-
-        .header-client {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #222;
-            padding-bottom: 20px;
-        }
-        .header-client h1 { font-size: 20px; letter-spacing: 2px; margin: 0; text-transform: uppercase; }
-        .header-client span { color: #004D40; }
-
-        .form-group { margin-bottom: 20px; }
-        .label { font-size: 12px; color: #888; margin-bottom: 8px; display: block; text-transform: uppercase; }
-        
-        .input-box {
-            background: #111;
-            border: 1px solid #333;
-            color: #fff;
-            width: 100%;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        .input-box:focus { border-color: #004D40; outline: none; }
-
-        .vehicle-selector {
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            margin-top: 10px;
+            justify-content: center;
         }
 
-        .vehicle-card {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 8px;
-            min-width: 140px;
-            padding: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
+        /* DEVICE FRAME (Per mobile look) */
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--white);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
-        
-        .vehicle-card.selected { border-color: #004D40; background: #001a15; }
-        .v-name { font-size: 14px; font-weight: bold; margin-bottom: 5px; display: block; }
-        .v-desc { font-size: 10px; color: #888; display: block; margin-bottom: 10px;}
-        .v-price { font-size: 16px; color: #fff; font-weight: bold; }
 
-        .bottom-bar {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: #111;
-            border-top: 1px solid #333;
+        /* HEADER */
+        .header {
             padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: var(--white);
+            z-index: 10;
+        }
+        .user-profile { display: flex; align-items: center; gap: 12px; }
+        .avatar {
+            width: 40px; height: 40px; background: var(--g-green);
+            color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-family: serif;
+        }
+        .greeting { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .username { font-weight: bold; font-size: 14px; }
+
+        /* HERO TEXT */
+        .hero { padding: 20px; padding-bottom: 10px; }
+        .hero h1 {
+            font-family: serif; font-size: 32px; color: var(--g-green);
+            margin: 0; line-height: 1.1;
+        }
+        .hero span { color: var(--g-gold); font-style: italic; }
+
+        /* TABS */
+        .tabs { display: flex; gap: 20px; padding: 0 20px; border-bottom: 1px solid #f0f0f0; margin-top: 20px; }
+        .tab {
+            padding-bottom: 10px; font-size: 14px; font-weight: bold; color: var(--text-muted);
+            cursor: pointer; border-bottom: 2px solid transparent; transition: 0.3s;
+        }
+        .tab.active { color: var(--g-green); border-color: var(--g-gold); }
+
+        /* BOOKING CARD */
+        .booking-widget {
+            margin: 20px; padding: 20px;
+            background: var(--white); border: 1px solid #f0f0f0;
+            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            position: relative; overflow: hidden;
+        }
+        /* Decorazione sfocata */
+        .decoration {
+            position: absolute; top: -20px; right: -20px; width: 100px; height: 100px;
+            background: #FDF6E3; border-radius: 50%; filter: blur(40px); z-index: 0;
         }
 
-        .total-price { display: flex; flex-direction: column; }
-        .total-label { font-size: 10px; color: #888; text-transform: uppercase; }
-        .total-amount { font-size: 24px; font-weight: bold; color: #fff; }
-
-        .btn-book {
-            background: #004D40;
-            color: #fff;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
+        .input-group {
+            display: flex; align-items: center; gap: 15px;
+            background: #FAFAFA; padding: 15px; border-radius: 12px;
+            margin-bottom: 10px; position: relative; z-index: 1; border: 1px solid transparent; transition: 0.3s;
         }
+        .input-group:focus-within { border-color: var(--g-gold); background: #fff; }
+
+        .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .dot.pickup { background: var(--g-green); box-shadow: 0 0 0 4px #E8F5E9; }
+        .dot.dropoff { background: var(--g-gold); border-radius: 2px; box-shadow: 0 0 0 4px #FFF8E1; }
+
+        .input-text label { display: block; font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
+        .input-text input {
+            border: none; background: transparent; width: 100%; font-size: 14px;
+            font-weight: 600; color: var(--text-main); outline: none; padding: 0; margin-top: 2px;
+        }
+
+        /* FLEET */
+        .fleet-scroll {
+            display: flex; overflow-x: auto; gap: 15px; padding: 0 20px 20px 20px;
+            scrollbar-width: none; /* Hide scrollbar */
+        }
+        .car-card {
+            min-width: 140px; background: var(--white); border: 1px solid #f0f0f0;
+            border-radius: 16px; padding: 15px; text-align: center; cursor: pointer;
+            transition: 0.2s;
+        }
+        .car-card.selected { border-color: var(--g-green); background: #F2F8F6; }
+        .car-icon { font-size: 30px; margin-bottom: 10px; display: block; }
+        .car-name { font-size: 12px; font-weight: bold; }
+        .car-price { font-size: 14px; font-weight: bold; color: var(--g-green); margin-top: 5px; }
+
+        /* BOTTOM CTA */
+        .bottom-action {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 30px 20px;
+            background: linear-gradient(to top, white 80%, transparent);
+            z-index: 20;
+        }
+        .btn-main {
+            width: 100%; background: var(--g-green); color: white; border: none;
+            padding: 18px; border-radius: 16px; font-size: 16px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(0, 56, 43, 0.3);
+            transition: transform 0.1s;
+        }
+        .btn-main:active { transform: scale(0.98); }
+
+        /* --- MAP VIEW (TRACKING) --- */
+        #tripView {
+            display: none; height: 100%; flex-direction: column; background: #E5E5E5; position: relative;
+        }
+        .map-bg {
+            position: absolute; inset: 0; opacity: 0.6;
+            background-image: radial-gradient(#ccc 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        /* CSS Art Roads */
+        .road { position: absolute; background: white; border: 1px solid #ccc; }
+        .road-1 { top: 0; bottom: 0; left: 30%; width: 40px; transform: skewX(-10deg); }
+        .road-2 { top: 40%; left: 0; right: 0; height: 30px; transform: rotate(-5deg); }
+
+        .floating-status {
+            position: absolute; top: 50px; left: 20px; right: 20px;
+            display: flex; justify-content: space-between; z-index: 50;
+        }
+        .status-pill {
+            background: var(--g-green); color: white; padding: 8px 16px; border-radius: 30px;
+            font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .pulse { width: 8px; height: 8px; background: #4ADE80; border-radius: 50%; animation: pulse 1.5s infinite; }
+
+        /* CAR ANIMATION */
+        .driver-car {
+            position: absolute; top: 60%; left: 10%;
+            font-size: 30px; background: white; border-radius: 50%;
+            width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 10;
+            transition: all 4s linear; /* Smooth movement */
+        }
+        .eta-badge {
+            position: absolute; bottom: -10px; background: black; color: white;
+            font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold;
+        }
+
+        /* DRIVER SHEET */
+        .driver-sheet {
+            margin-top: auto; background: white; border-radius: 30px 30px 0 0;
+            padding: 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); z-index: 50;
+            animation: slideUp 0.5s ease;
+        }
+        .driver-info { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .driver-pic {
+            width: 60px; height: 60px; background: #f0f0f0; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 24px;
+            border: 2px solid white; box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
     </style>
 </head>
 <body>
 
-    <div class="header-client">
-        <h1>Giorizz<span>.</span> Booking</h1>
-    </div>
-
-    <div class="form-group">
-        <label class="label">Punto di Ritiro</label>
-        <input type="text" class="input-box" placeholder="Es. Aeroporto Malpensa" id="pickup">
-    </div>
-
-    <div class="form-group">
-        <label class="label">Destinazione</label>
-        <input type="text" class="input-box" placeholder="Es. Hotel Principe di Savoia" id="dropoff">
-    </div>
-
-    <div class="form-group">
-        <label class="label">Scegli la tua classe</label>
-        <div class="vehicle-selector">
-            <div class="vehicle-card selected" onclick="selectVehicle(this, 150)">
-                <span class="v-name">BUSINESS CLASS</span>
-                <span class="v-desc">Mercedes Classe E/S<br>Max 3 Pax</span>
-                <span class="v-price">€ 150</span>
+    <div class="app-container">
+        
+        <div id="bookingView" style="height: 100%; display: flex; flex-direction: column;">
+            <div class="header">
+                <div class="user-profile">
+                    <div class="avatar">A</div>
+                    <div>
+                        <div class="greeting">Buonasera</div>
+                        <div class="username">Alessandro</div>
+                    </div>
+                </div>
+                <i data-lucide="menu"></i>
             </div>
-            <div class="vehicle-card" onclick="selectVehicle(this, 220)">
-                <span class="v-name">LUXURY VAN</span>
-                <span class="v-desc">Mercedes Classe V<br>Max 7 Pax</span>
-                <span class="v-price">€ 220</span>
+
+            <div style="overflow-y: auto; flex: 1; padding-bottom: 100px;">
+                <div class="hero">
+                    <h1>Where would you like<br><span>to go today?</span></h1>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab active">Transfer</div>
+                    <div class="tab">Orario</div>
+                    <div class="tab">Elicottero</div>
+                </div>
+
+                <div class="booking-widget">
+                    <div class="decoration"></div>
+                    
+                    <div class="input-group">
+                        <div class="dot pickup"></div>
+                        <div class="input-text">
+                            <label>Ritiro</label>
+                            <input type="text" id="pickup" value="Posizione Attuale" placeholder="Dove ti trovi?">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <div class="dot dropoff"></div>
+                        <div class="input-text">
+                            <label>Destinazione</label>
+                            <input type="text" id="dropoff" placeholder="Dove vuoi andare?">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 0 20px; margin-bottom: 10px; font-size: 12px; font-weight: bold; color: var(--g-green);">SELEZIONA CLASSE</div>
+                <div class="fleet-scroll">
+                    <div class="car-card selected" onclick="selectCar(this, 'business', 150)">
+                        <span class="car-icon">🚗</span>
+                        <div class="car-name">Business Class</div>
+                        <div class="car-price">€ 150</div>
+                    </div>
+                    <div class="car-card" onclick="selectCar(this, 'van', 220)">
+                        <span class="car-icon">🚐</span>
+                        <div class="car-name">Luxury Van</div>
+                        <div class="car-price">€ 220</div>
+                    </div>
+                    <div class="car-card" onclick="selectCar(this, 'heli', 1200)">
+                        <span class="car-icon">🚁</span>
+                        <div class="car-name">Heli Transfer</div>
+                        <div class="car-price">€ 1200</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-action">
+                <button class="btn-main" onclick="bookRide()">
+                    <span>Prenota Corsa</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
             </div>
         </div>
-    </div>
 
-    <div class="bottom-bar">
-        <div class="total-price">
-            <span class="total-label">Totale Stimato</span>
-            <span class="total-amount" id="displayPrice">€ 150</span>
+        <div id="tripView">
+            <div class="map-bg"></div>
+            <div class="road road-1"></div>
+            <div class="road road-2"></div>
+
+            <div class="floating-status">
+                <div style="background:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 5px 10px rgba(0,0,0,0.1);" onclick="location.reload()">
+                    <i data-lucide="x" color="black"></i>
+                </div>
+                <div class="status-pill">
+                    <div class="pulse"></div>
+                    IN ARRIVO
+                </div>
+            </div>
+
+            <div id="driverCar" class="driver-car">
+                🚐
+                <div class="eta-badge">8 min</div>
+            </div>
+
+            <div class="driver-sheet">
+                <div class="driver-info">
+                    <div class="driver-pic">👨🏻‍✈️</div>
+                    <div style="flex:1;">
+                        <div style="font-size:18px; font-weight:bold;">Giuseppe M.</div>
+                        <div style="font-size:12px; color:gray;">4.98 ★ • Mercedes V-Class</div>
+                        <div style="font-size:10px; background:#f0f0f0; display:inline-block; padding:2px 5px; border-radius:4px; margin-top:4px;">GA 992 LX</div>
+                    </div>
+                    <div style="width:50px; height:50px; background:var(--g-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white;">
+                        <i data-lucide="phone"></i>
+                    </div>
+                </div>
+
+                <div style="background:#f9f9f9; padding:15px; border-radius:12px; border-left: 2px solid var(--g-green);">
+                    <div style="font-size:10px; color:gray; font-weight:bold; margin-bottom:2px;">DESTINAZIONE</div>
+                    <div id="destDisplay" style="font-weight:bold; font-size:14px;">Aeroporto Catania</div>
+                </div>
+            </div>
         </div>
-        <button class="btn-book" onclick="alert('Funzione in arrivo con il Database!')">PRENOTA ORA</button>
+
     </div>
 
     <script>
-        function selectVehicle(element, price) {
-            document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
-            document.getElementById('displayPrice').innerText = '€ ' + price;
+        // Inizializza Icone
+        lucide.createIcons();
+
+        // --- CONFIGURAZIONE SUPABASE ---
+        // ⚠️ INSERISCI QUI I TUOI DATI SE VUOI CHE FUNZIONI DAVVERO CON L'AUTISTA
+        const SUPABASE_URL = 'INCOLLA_QUI_IL_TUO_URL';
+        const SUPABASE_KEY = 'INCOLLA_QUI_LA_TUA_CHIAVE';
+        
+        let selectedVehicle = 'business';
+        let selectedPrice = 150;
+
+        function selectCar(el, type, price) {
+            document.querySelectorAll('.car-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedVehicle = type;
+            selectedPrice = price;
+        }
+
+        async function bookRide() {
+            const pickup = document.getElementById('pickup').value;
+            const dropoff = document.getElementById('dropoff').value;
+            const btn = document.querySelector('.btn-main');
+
+            if(!dropoff) { alert("Inserisci una destinazione!"); return; }
+
+            // Effetto Caricamento
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Ricerca Driver...";
+            btn.style.opacity = "0.7";
+
+            // --- QUI COLLEGHEREMO SUPABASE ---
+            // const { data, error } = await supabase.from('bookings').insert([...])
+            
+            // SIMULAZIONE SUCCESSO (Per Demo Grafica)
+            setTimeout(() => {
+                // Cambia Vista
+                document.getElementById('bookingView').style.display = 'none';
+                document.getElementById('tripView').style.display = 'flex';
+                document.getElementById('destDisplay').innerText = dropoff;
+
+                // Avvia Animazione Auto
+                startCarAnimation();
+            }, 1500);
+        }
+
+        function startCarAnimation() {
+            const car = document.getElementById('driverCar');
+            // Muove la macchina dopo un po'
+            setTimeout(() => {
+                car.style.top = "40%";
+                car.style.left = "40%";
+            }, 500);
+            
+            setTimeout(() => {
+                car.style.top = "30%";
+                car.style.left = "70%";
+            }, 3000);
         }
     </script>
 </body>
