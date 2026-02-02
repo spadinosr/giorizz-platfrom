@@ -3,315 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Giorizz Client</title>
+    <title>Giorizz Driver Pro</title>
     
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        giorizz: { green: '#00382B', gold: '#C5A065', bg: '#F4F4F5' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
     <style>
-        /* --- STILE LUXURY SYSTEM --- */
-        :root {
-            --g-green: #00382B;
-            --g-gold: #C5A065;
-            --g-bg: #F4F4F5;
-            --white: #ffffff;
-            --text-main: #18181b;
-            --text-muted: #a1a1aa;
+        body { background-color: #f4f4f5; display: flex; justify-content: center; min-height: 100vh; }
+        .app-frame { width: 100%; max-width: 450px; background: white; position: relative; display: flex; flex-direction: column; height: 100vh; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .pulse-ring { animation: pulse-green 2s infinite; }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(0, 56, 43, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 56, 43, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 56, 43, 0); }
         }
-
-        body {
-            background-color: var(--g-bg);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 450px;
-            background: var(--white);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-
-        /* HEADER */
-        .header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--white);
-            z-index: 10;
-        }
-        .user-profile { display: flex; align-items: center; gap: 12px; }
-        .avatar {
-            width: 40px; height: 40px; background: var(--g-green);
-            color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-family: serif;
-        }
-        .greeting { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .username { font-weight: bold; font-size: 14px; }
-
-        /* HERO TEXT */
-        .hero { padding: 20px; padding-bottom: 10px; }
-        .hero h1 {
-            font-family: serif; font-size: 32px; color: var(--g-green);
-            margin: 0; line-height: 1.1;
-        }
-        .hero span { color: var(--g-gold); font-style: italic; }
-
-        /* BOOKING WIDGET */
-        .booking-widget {
-            margin: 20px; padding: 20px;
-            background: var(--white); border: 1px solid #f0f0f0;
-            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            position: relative; overflow: hidden;
-        }
-        .decoration {
-            position: absolute; top: -20px; right: -20px; width: 100px; height: 100px;
-            background: #FDF6E3; border-radius: 50%; filter: blur(40px); z-index: 0;
-        }
-
-        .input-group {
-            display: flex; align-items: center; gap: 15px;
-            background: #FAFAFA; padding: 15px; border-radius: 12px;
-            margin-bottom: 10px; position: relative; z-index: 1; border: 1px solid transparent; transition: 0.3s;
-        }
-        .input-group:focus-within { border-color: var(--g-gold); background: #fff; }
-
-        .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-        .dot.pickup { background: var(--g-green); box-shadow: 0 0 0 4px #E8F5E9; }
-        .dot.dropoff { background: var(--g-gold); border-radius: 2px; box-shadow: 0 0 0 4px #FFF8E1; }
-
-        .input-text { flex: 1; }
-        .input-text label { display: block; font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
-        .input-text input {
-            border: none; background: transparent; width: 100%; font-size: 14px;
-            font-weight: 600; color: var(--text-main); outline: none; padding: 0; margin-top: 2px;
-        }
-
-        /* FLEET */
-        .fleet-scroll {
-            display: flex; overflow-x: auto; gap: 15px; padding: 0 20px 20px 20px;
-            scrollbar-width: none;
-        }
-        .car-card {
-            min-width: 140px; background: var(--white); border: 1px solid #f0f0f0;
-            border-radius: 16px; padding: 15px; text-align: center; cursor: pointer;
-            transition: 0.2s;
-        }
-        .car-card.selected { border-color: var(--g-green); background: #F2F8F6; }
-        .car-icon { font-size: 30px; margin-bottom: 10px; display: block; }
-        .car-name { font-size: 12px; font-weight: bold; }
-        .car-price { font-size: 14px; font-weight: bold; color: var(--g-green); margin-top: 5px; }
-
-        /* BUTTON */
-        .bottom-action {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 30px 20px;
-            background: linear-gradient(to top, white 80%, transparent);
-            z-index: 20;
-        }
-        .btn-main {
-            width: 100%; background: var(--g-green); color: white; border: none;
-            padding: 18px; border-radius: 16px; font-size: 16px; font-weight: bold;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(0, 56, 43, 0.3);
-            transition: transform 0.1s;
-        }
-        .btn-main:active { transform: scale(0.98); }
-
-        /* MAP VIEW */
-        #tripView {
-            display: none; height: 100%; flex-direction: column; background: #E5E5E5; position: relative;
-        }
-        .map-bg {
-            position: absolute; inset: 0; opacity: 0.6;
-            background-image: radial-gradient(#ccc 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        .floating-status {
-            position: absolute; top: 50px; left: 20px; right: 20px;
-            display: flex; justify-content: space-between; z-index: 50;
-        }
-        .status-pill {
-            background: var(--g-green); color: white; padding: 8px 16px; border-radius: 30px;
-            font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .pulse { width: 8px; height: 8px; background: #4ADE80; border-radius: 50%; animation: pulse 1.5s infinite; }
-        
-        .driver-sheet {
-            margin-top: auto; background: white; border-radius: 30px 30px 0 0;
-            padding: 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); z-index: 50;
-            animation: slideUp 0.5s ease;
-        }
-        
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <div id="bookingView" style="height: 100%; display: flex; flex-direction: column;">
-            <div class="header">
-                <div class="user-profile">
-                    <div class="avatar">C</div>
-                    <div>
-                        <div class="greeting">Benvenuto</div>
-                        <div class="username">Cliente VIP</div>
-                    </div>
-                </div>
-                <i data-lucide="menu"></i>
-            </div>
-
-            <div style="overflow-y: auto; flex: 1; padding-bottom: 100px;">
-                <div class="hero">
-                    <h1>Prenota il tuo<br><span>Luxury Transfer</span></h1>
-                </div>
-
-                <div class="booking-widget">
-                    <div class="decoration"></div>
-                    <div class="input-group">
-                        <div class="dot pickup"></div>
-                        <div class="input-text">
-                            <label>Ritiro</label>
-                            <input type="text" id="pickup" value="Grand Hotel, Milano">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <div class="dot dropoff"></div>
-                        <div class="input-text">
-                            <label>Destinazione</label>
-                            <input type="text" id="dropoff" placeholder="Inserisci destinazione...">
-                        </div>
-                    </div>
-                </div>
-
-                <div style="padding: 0 20px; margin-bottom: 10px; font-size: 12px; font-weight: bold; color: var(--g-green);">SELEZIONA CLASSE</div>
-                <div class="fleet-scroll">
-                    <div class="car-card selected" onclick="selectCar(this, 'business', 150)">
-                        <span class="car-icon">🚗</span>
-                        <div class="car-name">Business Class</div>
-                        <div class="car-price">€ 150</div>
-                    </div>
-                    <div class="car-card" onclick="selectCar(this, 'van', 220)">
-                        <span class="car-icon">🚐</span>
-                        <div class="car-name">Luxury Van</div>
-                        <div class="car-price">€ 220</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bottom-action">
-                <button class="btn-main" onclick="bookRide()">
-                    <span>CONFERMA PRENOTAZIONE</span>
-                    <i data-lucide="arrow-right"></i>
-                </button>
-            </div>
-        </div>
-
-        <div id="tripView">
-            <div class="map-bg"></div>
-            
-            <div class="floating-status">
-                <div class="status-pill">
-                    <div class="pulse"></div>
-                    RICERCA DRIVER IN CORSO...
-                </div>
-            </div>
-
-            <div class="driver-sheet">
-                <div style="text-align: center;">
-                    <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">Richiesta Inviata</h2>
-                    <p style="color: #666; font-size: 14px;">I nostri autisti stanno ricevendo la tua richiesta.</p>
-                    <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 10px;">
-                        <div style="font-size: 12px; font-weight: bold; color: var(--g-green);">ID PRENOTAZIONE</div>
-                        <div id="bookingIdDisplay" style="font-family: monospace; font-size: 16px;">---</div>
-                    </div>
-                    <button onclick="location.reload()" style="margin-top: 20px; width: 100%; padding: 15px; background: #eee; border: none; border-radius: 12px; font-weight: bold;">Nuova Prenotazione</button>
-                </div>
-            </div>
-        </div>
-
+<div class="app-frame">
+    
+    <div class="bg-white border-b border-zinc-100 p-4 flex justify-between items-center z-10">
+        <span class="text-xl font-extrabold tracking-widest text-giorizz-green">GIORIZZ</span>
+        <button id="onlineBtn" onclick="toggleOnline()" class="flex items-center space-x-2 text-[10px] font-bold border px-4 py-2 rounded-full transition-all bg-zinc-100 text-zinc-500">
+            <i data-lucide="power" class="w-3 h-3"></i>
+            <span id="onlineText">VAI ONLINE</span>
+        </button>
     </div>
 
-    <script>
-        lucide.createIcons();
+    <div id="searchingView" class="flex-1 flex flex-col items-center justify-center p-6 text-center" style="display:none;">
+        <div class="w-32 h-32 rounded-full bg-emerald-50 flex items-center justify-center mb-6 relative">
+            <div class="absolute inset-0 rounded-full border-4 border-emerald-100 animate-ping"></div>
+            <i data-lucide="radar" class="w-12 h-12 text-giorizz-green"></i>
+        </div>
+        <h2 class="text-lg font-bold text-zinc-800">Ricerca Corse...</h2>
+        <p class="text-xs text-zinc-400 mt-2">Priorità assegnata.<br>Rimani in attesa.</p>
+    </div>
 
-        // --- I TUOI DATI SUPABASE ---
-        // Ho messo le chiavi che mi hai dato.
-        // SE DA ANCORA ERRORE: Assicurati di aver fatto il passaggio "SQL Editor" su Supabase per creare la tabella!
-        const SUPABASE_URL = 'https://ysgebcbptgjlpbgnlcjt.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_vWLK2XVCNfki5wrkDEpBCQ_XCsjERhe';
+    <div id="offlineView" class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <div class="w-24 h-24 rounded-full bg-zinc-100 flex items-center justify-center mb-4">
+            <i data-lucide="coffee" class="w-10 h-10 text-zinc-400"></i>
+        </div>
+        <h2 class="text-lg font-bold text-zinc-400">Sei Offline</h2>
+        <p class="text-xs text-zinc-400 mt-2">Vai Online per lavorare.</p>
+    </div>
+
+    <div id="jobCard" class="hidden absolute inset-0 bg-white z-50 flex flex-col">
+        <div class="bg-giorizz-green p-6 text-white pb-10">
+            <div class="text-xs font-bold opacity-70 uppercase mb-1">Nuova Richiesta</div>
+            <div class="text-3xl font-bold">€ <span id="offerPrice">---</span></div>
+            <div class="flex gap-2 mt-4">
+                <span class="bg-white/20 px-2 py-1 rounded text-[10px] font-bold" id="offerVehicle">---</span>
+            </div>
+        </div>
+        <div class="flex-1 p-6 -mt-6 bg-white rounded-t-3xl overflow-y-auto">
+            <div class="pl-4 border-l-2 border-zinc-100 space-y-6 relative">
+                <div class="relative pl-6">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-giorizz-green"></div>
+                    <div class="text-xs font-bold text-zinc-400 mb-1">RITIRO</div>
+                    <div id="offerPickup" class="text-lg font-bold text-zinc-900 leading-tight">---</div>
+                </div>
+                <div class="relative pl-6">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-giorizz-gold"></div>
+                    <div class="text-xs font-bold text-zinc-400 mb-1">DESTINAZIONE</div>
+                    <div id="offerDropoff" class="text-lg font-bold text-zinc-900 leading-tight">---</div>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 border-t border-zinc-100 flex gap-4">
+            <button onclick="rejectJob()" class="flex-1 py-4 rounded-xl font-bold text-zinc-400 bg-zinc-100">IGNORA</button>
+            <button onclick="acceptJob()" class="flex-[2] py-4 rounded-xl font-bold text-white bg-giorizz-green shadow-xl pulse-ring">ACCETTA</button>
+        </div>
+    </div>
+
+    <div id="missionView" class="hidden absolute inset-0 bg-white z-40 flex flex-col">
+        <div class="p-6 pb-2">
+            <h1 class="text-2xl font-bold text-giorizz-green">Cliente VIP</h1>
+            <p class="text-zinc-500 text-sm font-medium mt-1" id="activeStatusLabel">In attesa...</p>
+        </div>
         
-        // Inizializza Client
-        const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        <div class="flex-1 overflow-y-auto px-6 py-4">
+            <div class="pl-2 border-l-2 border-zinc-100 space-y-8 relative" id="missionTimeline">
+                </div>
+        </div>
 
-        let selectedVehicle = 'business';
-        let selectedPrice = 150;
+        <div class="bg-white border-t border-zinc-100 p-5 pb-8 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+            <button id="missionBtn" onclick="advanceMissionStep()" class="w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-giorizz-green">
+                <i id="btnIcon" data-lucide="navigation"></i>
+                <span id="btnText">CARICAMENTO...</span>
+            </button>
+        </div>
+    </div>
 
-        function selectCar(el, type, price) {
-            document.querySelectorAll('.car-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            selectedVehicle = type;
-            selectedPrice = price;
+</div>
+
+<script>
+    lucide.createIcons();
+
+    // --- CONFIGURAZIONE ---
+    const SUPABASE_URL = 'https://ysgebcbptgjlpbgnlcjt.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_vWLK2XVCNfki5wrkDEpBCQ_XCsjERhe';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Variabili di Stato
+    let isOnline = false;
+    let searchInterval = null;
+    let activeJob = null; // Contiene tutti i dati della corsa (indirizzi, id, ecc.)
+    let missionStep = 0; // 0=NavPickup, 1=Arrived, 2=StartTrip, 3=NavDropoff, 4=Complete
+
+    // --- LOGICA ONLINE/OFFLINE ---
+    function toggleOnline() {
+        isOnline = !isOnline;
+        const btn = document.getElementById('onlineBtn');
+        const txt = document.getElementById('onlineText');
+        
+        if (isOnline) {
+            btn.className = "flex items-center space-x-2 text-[10px] font-bold border px-4 py-2 rounded-full transition-all bg-emerald-100 text-emerald-700 border-emerald-200";
+            txt.innerText = "ONLINE";
+            document.getElementById('offlineView').style.display = 'none';
+            document.getElementById('searchingView').style.display = 'flex';
+            searchInterval = setInterval(checkForRides, 3000); // Cerca ogni 3 sec
+            checkForRides();
+        } else {
+            btn.className = "flex items-center space-x-2 text-[10px] font-bold border px-4 py-2 rounded-full transition-all bg-zinc-100 text-zinc-500";
+            txt.innerText = "VAI ONLINE";
+            document.getElementById('offlineView').style.display = 'flex';
+            document.getElementById('searchingView').style.display = 'none';
+            clearInterval(searchInterval);
+        }
+    }
+
+    // --- RICERCA LAVORO ---
+    async function checkForRides() {
+        if (!isOnline) return;
+        // Cerca corse 'pending'
+        const { data } = await db.from('bookings').select('*').eq('status', 'pending').limit(1);
+        if (data && data.length > 0) {
+            showOffer(data[0]);
+        }
+    }
+
+    function showOffer(job) {
+        clearInterval(searchInterval); // Smetti di cercare
+        activeJob = job;
+        
+        // Riempi UI Offerta
+        document.getElementById('offerPrice').innerText = job.price;
+        document.getElementById('offerVehicle').innerText = job.vehicle_type.toUpperCase();
+        document.getElementById('offerPickup').innerText = job.pickup_address;
+        document.getElementById('offerDropoff').innerText = job.dropoff_address;
+        
+        document.getElementById('jobCard').classList.remove('hidden');
+        if(navigator.vibrate) navigator.vibrate([500, 200, 500]);
+    }
+
+    function rejectJob() {
+        document.getElementById('jobCard').classList.add('hidden');
+        activeJob = null;
+        searchInterval = setInterval(checkForRides, 3000); // Ricomincia a cercare
+    }
+
+    // --- INIZIO MISSIONE ---
+    async function acceptJob() {
+        // Aggiorna DB: status -> assigned
+        const { error } = await db.from('bookings').update({ status: 'assigned' }).eq('id', activeJob.id);
+        
+        if (!error) {
+            document.getElementById('jobCard').classList.add('hidden');
+            document.getElementById('missionView').classList.remove('hidden');
+            missionStep = 0; // Si parte dal passo 0
+            updateMissionUI();
+        } else {
+            alert("Errore: Corsa già presa da un altro driver.");
+            rejectJob();
+        }
+    }
+
+    // --- GESTIONE STEP-BY-STEP ---
+    async function advanceMissionStep() {
+        // Logica del bottone principale
+        if (missionStep === 0) {
+            // NAVIGA AL RITIRO
+            openMaps(activeJob.pickup_address);
+            missionStep++; 
+        } 
+        else if (missionStep === 1) {
+            // ARRIVATO AL RITIRO
+            // Qui potremmo aggiornare lo stato DB a "arrived" se volessimo
+            missionStep++;
+        }
+        else if (missionStep === 2) {
+            // CLIENTE A BORDO -> INIZIA VIAGGIO
+            openMaps(activeJob.dropoff_address);
+            missionStep++;
+        }
+        else if (missionStep === 3) {
+            // CORSA FINITA -> SALVA SU DB
+            await db.from('bookings').update({ status: 'completed' }).eq('id', activeJob.id);
+            alert("Ottimo lavoro! Corsa completata. 💰");
+            location.reload(); // Ricarica per tornare alla ricerca
+            return; 
+        }
+        updateMissionUI();
+    }
+
+    function updateMissionUI() {
+        const btn = document.getElementById('missionBtn');
+        const btnText = document.getElementById('btnText');
+        const statusLabel = document.getElementById('activeStatusLabel');
+        const tl = document.getElementById('missionTimeline');
+
+        // Render Timeline con indirizzi veri
+        tl.innerHTML = `
+            <div class="relative pl-6 pb-8 border-l-2 ${missionStep > 1 ? 'border-giorizz-green' : 'border-zinc-100'}">
+                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full ${missionStep > 1 ? 'bg-giorizz-green' : 'bg-giorizz-green animate-pulse'}"></div>
+                <div class="text-xs font-bold text-zinc-400 mb-1">RITIRO</div>
+                <div class="text-sm font-bold text-zinc-900">${activeJob.pickup_address}</div>
+            </div>
+            <div class="relative pl-6">
+                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full ${missionStep >= 3 ? 'bg-giorizz-green' : 'bg-zinc-300'}"></div>
+                <div class="text-xs font-bold text-zinc-400 mb-1">DESTINAZIONE</div>
+                <div class="text-sm font-bold text-zinc-900">${activeJob.dropoff_address}</div>
+            </div>
+        `;
+
+        // Testi del Bottone
+        if(missionStep === 0) {
+            btnText.innerText = "NAVIGA AL RITIRO";
+            btn.className = "w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-giorizz-green pulse-ring";
+            statusLabel.innerText = "In viaggio verso il cliente";
+        } else if (missionStep === 1) {
+            btnText.innerText = "SONO ARRIVATO";
+            btn.className = "w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-zinc-800";
+            btn.classList.remove('pulse-ring');
+            statusLabel.innerText = "Arrivo al punto di ritiro";
+        } else if (missionStep === 2) {
+            btnText.innerText = "INIZIA VIAGGIO";
+            btn.className = "w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-giorizz-green";
+            statusLabel.innerText = "Cliente a bordo";
+        } else if (missionStep === 3) {
+            btnText.innerText = "COMPLETA CORSA";
+            btn.className = "w-full py-4 rounded-xl font-bold text-white shadow-xl flex justify-center items-center space-x-3 text-lg bg-red-600";
+            statusLabel.innerText = "In viaggio verso destinazione";
         }
 
-        async function bookRide() {
-            const pickup = document.getElementById('pickup').value;
-            const dropoff = document.getElementById('dropoff').value;
-            const btn = document.querySelector('.btn-main');
+        lucide.createIcons();
+    }
 
-            if(!dropoff) { alert("Inserisci una destinazione!"); return; }
+    function openMaps(addr) {
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}`, '_blank');
+    }
 
-            // UI Loading
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "Invio al sistema...";
-            btn.style.opacity = "0.7";
-            btn.disabled = true;
-
-            // --- INVIO REALE A SUPABASE ---
-            const { data, error } = await db
-                .from('bookings')
-                .insert([
-                    { 
-                        pickup_address: pickup,
-                        dropoff_address: dropoff,
-                        vehicle_type: selectedVehicle,
-                        price: selectedPrice,
-                        status: 'pending',
-                        pax: 2, 
-                        luggage: 2
-                    }
-                ])
-                .select();
-
-            if (error) {
-                console.error('Errore:', error);
-                alert("ERRORE: " + error.message + "\n\nHai eseguito il codice SQL su Supabase per creare la tabella 'bookings'?");
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                btn.style.opacity = "1";
-            } else {
-                // Successo!
-                const newBooking = data[0];
-                document.getElementById('bookingView').style.display = 'none';
-                document.getElementById('tripView').style.display = 'flex';
-                document.getElementById('bookingIdDisplay').innerText = newBooking.id;
-            }
-        }
-    </script>
+</script>
 </body>
 </html>
