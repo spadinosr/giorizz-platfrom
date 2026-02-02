@@ -1,1 +1,72 @@
+/* LAYOUT — STRUTTURA DELLE PAGINE */
 
+/* Header */
+header {
+  width: 100%;
+  padding: 20px 0;
+  background-color: var(--gray);
+  border-bottom: 1px solid var(--gray-light);
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Footer */
+footer {
+  width: 100%;
+  padding: 30px 0;
+  background-color: var(--gray);
+  border-top: 1px solid var(--gray-light);
+  margin-top: 50px;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* Sezioni */
+section {
+  padding: 60px 0;
+}
+
+section.dark {
+  background-color: var(--black);
+}
+
+section.gray {
+  background-color: var(--gray);
+}
+
+/* Griglie */
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Spaziature */
+.mt-20 { margin-top: 20px; }
+.mt-40 { margin-top: 40px; }
+.mt-60 { margin-top: 60px; }
+
+.mb-20 { margin-bottom: 20px; }
+.mb-40 { margin-bottom: 40px; }
+.mb-60 { margin-bottom: 60px; }
+
+/* Contenitore centrale */
+.center {
+  text-align: center;
+}
