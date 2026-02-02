@@ -1,1 +1,52 @@
+/* BASE — RESET E VARIABILI GLOBALI */
 
+/* Reset CSS semplice */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Variabili colore GIORIZZ */
+:root {
+  --black: #0a0a0a;
+  --white: #ffffff;
+  --gold: #d4af37;
+  --gold-soft: #e8d7a1;
+  --gray: #1a1a1a;
+  --gray-light: #2a2a2a;
+
+  --font-main: 'Inter', sans-serif;
+}
+
+/* Stile base del body */
+body {
+  background-color: var(--black);
+  color: var(--white);
+  font-family: var(--font-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Link */
+a {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Titoli */
+h1, h2, h3, h4 {
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* Contenitore principale */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
