@@ -1,1 +1,94 @@
+/* COMPONENTS — ELEMENTI UI RIUTILIZZABILI */
 
+/* BOTTONI */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-align: center;
+}
+
+.btn-gold {
+  background-color: var(--gold);
+  color: var(--black);
+}
+
+.btn-gold:hover {
+  background-color: var(--gold-soft);
+}
+
+.btn-dark {
+  background-color: var(--gray-light);
+  color: var(--white);
+}
+
+.btn-dark:hover {
+  opacity: 0.8;
+}
+
+/* CARD */
+.card {
+  background-color: var(--gray);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--gray-light);
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+}
+
+/* BADGE */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-gold {
+  background-color: var(--gold);
+  color: var(--black);
+}
+
+.badge-dark {
+  background-color: var(--gray-light);
+  color: var(--white);
+}
+
+/* INPUT */
+.input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--gray-light);
+  background-color: var(--gray);
+  color: var(--white);
+  margin-bottom: 15px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+/* SEZIONI SPECIALI */
+.section-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  opacity: 0.7;
+  text-align: center;
+  margin-bottom: 40px;
+}
