@@ -1,6 +1,14 @@
 // HQ ADMIN — LOGICA BASE
 
 console.log("HQ Admin script caricato correttamente");
+checkSession().then(session => {
+    if (!session) {
+        console.log("Nessuna sessione attiva");
+        // In futuro potremo reindirizzare al login
+    } else {
+        console.log("Sessione attiva:", session);
+    }
+});
 
 // Controllo sessione (in futuro potremo aggiungere login admin)
 checkSession().then(session => {
