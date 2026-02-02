@@ -68,14 +68,6 @@
         }
         .hero span { color: var(--g-gold); font-style: italic; }
 
-        /* TABS */
-        .tabs { display: flex; gap: 20px; padding: 0 20px; border-bottom: 1px solid #f0f0f0; margin-top: 20px; }
-        .tab {
-            padding-bottom: 10px; font-size: 14px; font-weight: bold; color: var(--text-muted);
-            cursor: pointer; border-bottom: 2px solid transparent; transition: 0.3s;
-        }
-        .tab.active { color: var(--g-green); border-color: var(--g-gold); }
-
         /* BOOKING WIDGET */
         .booking-widget {
             margin: 20px; padding: 20px;
@@ -258,7 +250,9 @@
     <script>
         lucide.createIcons();
 
-        // --- I TUOI DATI SUPABASE (INSERITI) ---
+        // --- I TUOI DATI SUPABASE ---
+        // Ho messo le chiavi che mi hai dato.
+        // SE DA ANCORA ERRORE: Assicurati di aver fatto il passaggio "SQL Editor" su Supabase per creare la tabella!
         const SUPABASE_URL = 'https://ysgebcbptgjlpbgnlcjt.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_vWLK2XVCNfki5wrkDEpBCQ_XCsjERhe';
         
@@ -298,15 +292,15 @@
                         vehicle_type: selectedVehicle,
                         price: selectedPrice,
                         status: 'pending',
-                        pax: 2, // Default
-                        luggage: 2 // Default
+                        pax: 2, 
+                        luggage: 2
                     }
                 ])
                 .select();
 
             if (error) {
                 console.error('Errore:', error);
-                alert("Errore nell'invio: " + error.message);
+                alert("ERRORE: " + error.message + "\n\nHai eseguito il codice SQL su Supabase per creare la tabella 'bookings'?");
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 btn.style.opacity = "1";
