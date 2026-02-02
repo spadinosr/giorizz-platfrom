@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giorizz Admin HQ</title>
+    <title>Giorizz HQ</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
         tailwind.config = {
@@ -21,85 +21,158 @@
             }
         }
     </script>
-    <style>
-        body { background-color: #f4f4f5; font-family: 'Inter', sans-serif; }
-        .sidebar-link { display: flex; align-items: center; padding: 12px 16px; color: #a1a1aa; border-radius: 8px; transition: all 0.2s; font-size: 14px; font-weight: 500; cursor: pointer; }
-        .sidebar-link:hover, .sidebar-link.active { background: rgba(255,255,255,0.05); color: white; }
-        .sidebar-link.active { border-left: 3px solid #C5A065; }
-        .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 6px; }
-    </style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body class="flex h-screen overflow-hidden bg-zinc-50">
 
-    <aside class="w-64 bg-[#050505] flex flex-col border-r border-zinc-800">
+    <aside class="w-64 bg-[#050505] flex flex-col border-r border-zinc-800 text-white">
         <div class="p-6">
-            <h1 class="text-xl font-extrabold tracking-[0.2em] text-white">GIORIZZ<span class="text-giorizz-gold">.</span></h1>
-            <div class="text-[10px] text-zinc-500 mt-1 uppercase tracking-wider">Command Center v2.0</div>
+            <h1 class="text-xl font-extrabold tracking-widest">GIORIZZ<span class="text-giorizz-gold">.</span></h1>
+            <div class="text-[10px] text-zinc-500 mt-1 uppercase tracking-wider">Live Control Room</div>
         </div>
-
-        <nav class="flex-1 px-4 space-y-1">
-            <div class="sidebar-link active" onclick="switchTab('dashboard')">
-                <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i> Dashboard
+        <nav class="flex-1 px-4 space-y-2 text-sm font-medium text-zinc-400">
+            <div class="p-3 bg-white/10 text-white rounded-lg cursor-pointer flex items-center gap-3">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
             </div>
-            <div class="sidebar-link" onclick="switchTab('dispatch')">
-                <i data-lucide="map" class="w-5 h-5 mr-3"></i> Live Dispatch
+            <div class="p-3 hover:bg-white/5 rounded-lg cursor-pointer flex items-center gap-3">
+                <i data-lucide="users" class="w-4 h-4"></i> Drivers
             </div>
-            <div class="sidebar-link" onclick="switchTab('fleet')">
-                <i data-lucide="car" class="w-5 h-5 mr-3"></i> Flotta & Driver
-            </div>
-            <div class="sidebar-link" onclick="switchTab('customers')">
-                <i data-lucide="users" class="w-5 h-5 mr-3"></i> Clienti VIP
-            </div>
-            <div class="mt-8 px-4 text-xs font-bold text-zinc-600 uppercase tracking-widest">Sistema</div>
-            <div class="sidebar-link" onclick="alert('Settings')">
-                <i data-lucide="settings" class="w-5 h-5 mr-3"></i> Impostazioni
+            <div class="p-3 hover:bg-white/5 rounded-lg cursor-pointer flex items-center gap-3">
+                <i data-lucide="settings" class="w-4 h-4"></i> Settings
             </div>
         </nav>
-
         <div class="p-4 border-t border-zinc-800">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-giorizz-gold flex items-center justify-center text-black font-bold text-xs">AD</div>
-                <div>
-                    <div class="text-white text-xs font-bold">Admin User</div>
-                    <div class="text-zinc-500 text-[10px]">HQ - Milano</div>
-                </div>
+            <div class="flex items-center gap-2 text-xs">
+                <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <span class="text-emerald-500 font-bold">DB CONNECTED</span>
             </div>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+    <main class="flex-1 flex flex-col">
         
-        <header class="h-16 bg-white border-b border-zinc-200 flex justify-between items-center px-8">
-            <div class="flex items-center gap-4">
-                <span class="px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-xs font-bold flex items-center gap-2">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> SYSTEM ONLINE
-                </span>
-                <span class="text-zinc-400 text-xs font-mono">LAT: 45.4642 | LON: 9.1900</span>
-            </div>
-            <div class="flex gap-4">
-                <button class="p-2 text-zinc-400 hover:text-black transition"><i data-lucide="bell"></i></button>
-                <button class="p-2 text-zinc-400 hover:text-black transition"><i data-lucide="search"></i></button>
-            </div>
+        <header class="h-16 bg-white border-b border-zinc-200 flex justify-between items-center px-8 shadow-sm">
+            <h2 class="font-bold text-zinc-800">Panoramica Giornaliera</h2>
+            <button onclick="fetchBookings()" class="p-2 bg-zinc-100 rounded-full hover:bg-zinc-200 transition">
+                <i data-lucide="refresh-cw" class="w-4 h-4 text-zinc-600"></i>
+            </button>
         </header>
 
-        <div class="flex-1 overflow-y-auto bg-zinc-50 p-8">
+        <div class="p-8 flex-1 overflow-y-auto">
             
-            <div class="grid grid-cols-4 gap-6 mb-8">
-                <div class="bg-white p-5 rounded-xl border border-zinc-100 shadow-sm">
-                    <div class="text-zinc-400 text-xs font-bold uppercase mb-2">Ricavi Giornalieri</div>
-                    <div class="text-2xl font-bold text-zinc-900">€ 2.450</div>
-                    <div class="text-emerald-600 text-xs font-bold mt-1">↑ 12% vs ieri</div>
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl border border-zinc-100 shadow-sm">
+                    <div class="text-xs text-zinc-400 font-bold uppercase">Incasso Stimato</div>
+                    <div class="text-2xl font-bold text-zinc-900 mt-1" id="totalRevenue">€ 0</div>
                 </div>
-                <div class="bg-white p-5 rounded-xl border border-zinc-100 shadow-sm">
-                    <div class="text-zinc-400 text-xs font-bold uppercase mb-2">Corse Attive</div>
-                    <div class="text-2xl font-bold text-zinc-900">8</div>
-                    <div class="text-zinc-500 text-xs mt-1">3 in attesa</div>
+                <div class="bg-white p-6 rounded-xl border border-zinc-100 shadow-sm">
+                    <div class="text-xs text-zinc-400 font-bold uppercase">Corse Totali</div>
+                    <div class="text-2xl font-bold text-zinc-900 mt-1" id="totalRides">0</div>
                 </div>
-                <div class="bg-white p-5 rounded-xl border border-zinc-100 shadow-sm">
-                    <div class="text-zinc-400 text-xs font-bold uppercase mb-2">Driver Online</div>
-                    <div class="text-2xl font-bold text-giorizz-green">12<span class="text-zinc-300 text-lg">/15</span></div>
-                    <div class="text-zinc-500 text-xs mt-1">2 in pausa</div>
+                <div class="bg-white p-6 rounded-xl border border-zinc-100 shadow-sm">
+                    <div class="text-xs text-zinc-400 font-bold uppercase">Stato Flotta</div>
+                    <div class="text-2xl font-bold text-giorizz-green mt-1">ATTIVA</div>
                 </div>
-                <div class="bg-white p-5 rounded-xl border border-zinc-100 shadow-sm">
-                    <div class="text-zinc-400 text-xs font-bold uppercase mb-2">Incidenti / Alert</div>
-                    <div class="text-2xl font-bold text-
+            </div>
+
+            <div class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-zinc-100 flex justify-between items-center">
+                    <h3 class="font-bold text-zinc-800">Prenotazioni in Tempo Reale</h3>
+                    <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold">LIVE DATA</span>
+                </div>
+                <table class="w-full text-left">
+                    <thead class="bg-zinc-50 text-zinc-500 text-[10px] uppercase font-bold">
+                        <tr>
+                            <th class="p-4">Data / Ora</th>
+                            <th class="p-4">Tratta (Ritiro ➝ Destinazione)</th>
+                            <th class="p-4">Veicolo</th>
+                            <th class="p-4">Prezzo</th>
+                            <th class="p-4">Stato</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-zinc-100" id="bookingTable">
+                        <tr>
+                            <td colspan="5" class="p-8 text-center text-zinc-400">Caricamento dati dal satellite...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // --- COLLEGAMENTO VERO ---
+        const SUPABASE_URL = 'https://ysgebcbptgjlpbgnlcjt.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_vWLK2XVCNfki5wrkDEpBCQ_XCsjERhe';
+        const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Funzione per scaricare i dati veri
+        async function fetchBookings() {
+            const { data, error } = await db
+                .from('bookings')
+                .select('*')
+                .order('created_at', { ascending: false }); // Le più recenti in alto
+
+            if (error) {
+                console.error(error);
+                alert("Errore connessione DB");
+            } else {
+                renderTable(data);
+                updateStats(data);
+            }
+        }
+
+        function renderTable(bookings) {
+            const tbody = document.getElementById('bookingTable');
+            tbody.innerHTML = '';
+
+            if(bookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-zinc-400">Nessuna prenotazione trovata.</td></tr>';
+                return;
+            }
+
+            bookings.forEach(b => {
+                // Formatta data
+                const date = new Date(b.created_at).toLocaleString('it-IT', { hour: '2-digit', minute:'2-digit', day:'numeric', month:'short' });
+                
+                // Colore Stato
+                let badgeClass = 'bg-zinc-100 text-zinc-600';
+                if(b.status === 'pending') badgeClass = 'bg-amber-50 text-amber-700 border border-amber-200';
+                if(b.status === 'assigned') badgeClass = 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold animate-pulse';
+
+                const html = `
+                <tr class="hover:bg-zinc-50 transition group">
+                    <td class="p-4 font-mono text-xs text-zinc-500">${date}</td>
+                    <td class="p-4">
+                        <div class="font-bold text-zinc-900">${b.pickup_address || 'N/D'}</div>
+                        <div class="text-xs text-zinc-400">➝ ${b.dropoff_address || 'N/D'}</div>
+                    </td>
+                    <td class="p-4"><span class="uppercase text-[10px] font-bold tracking-wider">${b.vehicle_type}</span></td>
+                    <td class="p-4 font-bold text-zinc-800">€ ${b.price}</td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 rounded-full text-[10px] uppercase tracking-wide ${badgeClass}">
+                            ${b.status === 'assigned' ? 'IN CORSO' : b.status}
+                        </span>
+                    </td>
+                </tr>
+                `;
+                tbody.innerHTML += html;
+            });
+        }
+
+        function updateStats(data) {
+            // Conta totale soldi
+            const total = data.reduce((acc, curr) => acc + (curr.price || 0), 0);
+            document.getElementById('totalRevenue').innerText = '€ ' + total;
+            document.getElementById('totalRides').innerText = data.length;
+        }
+
+        // Avvia aggiornamento automatico ogni 5 secondi
+        fetchBookings();
+        setInterval(fetchBookings, 5000);
+
+    </script>
+</body>
+</html>
