@@ -1,285 +1,115 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Giorizz Client VIP</title>
-    
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GIORIZZ — Client VIP</title>
 
-    <style>
-        /* --- STILE LUXURY SYSTEM --- */
-        :root {
-            --g-green: #00382B;
-            --g-gold: #C5A065;
-            --g-bg: #F4F4F5;
-            --white: #ffffff;
-            --text-main: #18181b;
-        }
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        body {
-            background-color: var(--g-bg);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
+  <!-- AUREA UI -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: "#D4AF37",
+            night: "#0A1A2F",
+            sand: "#E8DCC3",
+            pearl: "#F8F8F8"
+          },
+          fontFamily: {
+            serif: ["Playfair Display", "serif"],
+            sans: ["Inter", "sans-serif"]
+          }
         }
-
-        .app-container {
-            width: 100%;
-            max-width: 450px;
-            background: var(--white);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-
-        /* HEADER */
-        .header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--white);
-            z-index: 10;
-        }
-        .avatar {
-            width: 40px; height: 40px; background: var(--g-green);
-            color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-family: serif;
-        }
-
-        /* HERO & FORM */
-        .hero { padding: 20px; padding-bottom: 10px; }
-        .hero h1 {
-            font-family: serif; font-size: 32px; color: var(--g-green);
-            margin: 0; line-height: 1.1;
-        }
-        .hero span { color: var(--g-gold); font-style: italic; }
-
-        .booking-widget {
-            margin: 20px; padding: 20px;
-            background: var(--white); border: 1px solid #f0f0f0;
-            border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            position: relative; overflow: hidden;
-        }
-        .decoration {
-            position: absolute; top: -20px; right: -20px; width: 100px; height: 100px;
-            background: #FDF6E3; border-radius: 50%; filter: blur(40px); z-index: 0;
-        }
-
-        .input-group {
-            display: flex; align-items: center; gap: 15px;
-            background: #FAFAFA; padding: 15px; border-radius: 12px;
-            margin-bottom: 10px; position: relative; z-index: 1; border: 1px solid transparent; transition: 0.3s;
-        }
-        .input-group:focus-within { border-color: var(--g-gold); background: #fff; }
-
-        .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-        .dot.pickup { background: var(--g-green); box-shadow: 0 0 0 4px #E8F5E9; }
-        .dot.dropoff { background: var(--g-gold); border-radius: 2px; box-shadow: 0 0 0 4px #FFF8E1; }
-
-        .input-text { flex: 1; }
-        .input-text label { display: block; font-size: 10px; color: #a1a1aa; text-transform: uppercase; font-weight: bold; }
-        .input-text input {
-            border: none; background: transparent; width: 100%; font-size: 14px;
-            font-weight: 600; color: var(--text-main); outline: none; padding: 0; margin-top: 2px;
-        }
-
-        /* FLEET SELECTION */
-        .fleet-scroll {
-            display: flex; overflow-x: auto; gap: 15px; padding: 0 20px 20px 20px;
-            scrollbar-width: none;
-        }
-        .car-card {
-            min-width: 140px; background: var(--white); border: 1px solid #f0f0f0;
-            border-radius: 16px; padding: 15px; text-align: center; cursor: pointer; transition: 0.2s;
-        }
-        .car-card.selected { border-color: var(--g-green); background: #F2F8F6; }
-        .car-icon { font-size: 30px; margin-bottom: 10px; display: block; }
-        .car-name { font-size: 12px; font-weight: bold; }
-        .car-price { font-size: 14px; font-weight: bold; color: var(--g-green); margin-top: 5px; }
-
-        /* BOTTOM ACTION */
-        .bottom-action {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 30px 20px;
-            background: linear-gradient(to top, white 80%, transparent);
-            z-index: 20;
-        }
-        .btn-main {
-            width: 100%; background: var(--g-green); color: white; border: none;
-            padding: 18px; border-radius: 16px; font-size: 16px; font-weight: bold;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(0, 56, 43, 0.3);
-            transition: transform 0.1s;
-        }
-        .btn-main:active { transform: scale(0.98); }
-
-        /* SUCCESS VIEW */
-        #tripView {
-            display: none; height: 100%; flex-direction: column; background: #E5E5E5; position: relative;
-        }
-        .map-bg {
-            position: absolute; inset: 0; opacity: 0.6;
-            background-image: radial-gradient(#ccc 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        .driver-sheet {
-            margin-top: auto; background: white; border-radius: 30px 30px 0 0;
-            padding: 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); z-index: 50;
-            animation: slideUp 0.5s ease;
-        }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-    </style>
+      }
+    };
+  </script>
 </head>
-<body>
 
-    <div class="app-container">
-        
-        <div id="bookingView" style="height: 100%; display: flex; flex-direction: column;">
-            <div class="header">
-                <div class="avatar">G</div>
-                <i data-lucide="menu"></i>
-            </div>
+<body class="bg-black text-pearl font-sans">
 
-            <div style="overflow-y: auto; flex: 1; padding-bottom: 100px;">
-                <div class="hero">
-                    <h1>Prenota il tuo<br><span>Luxury Transfer</span></h1>
-                </div>
+  <!-- HEADER -->
+  <header class="p-6 text-center border-b border-zinc-800">
+    <h1 class="text-3xl font-serif">Client VIP</h1>
+    <p class="text-sand text-sm mt-1">Benvenuto nell’esperienza GIORIZZ</p>
+  </header>
 
-                <div class="booking-widget">
-                    <div class="decoration"></div>
-                    <div class="input-group">
-                        <div class="dot pickup"></div>
-                        <div class="input-text">
-                            <label>Ritiro</label>
-                            <input type="text" id="pickup" value="Grand Hotel, Milano" placeholder="Dove ti trovi?">
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <div class="dot dropoff"></div>
-                        <div class="input-text">
-                            <label>Destinazione</label>
-                            <input type="text" id="dropoff" placeholder="Dove vuoi andare?">
-                        </div>
-                    </div>
-                </div>
+  <!-- MAIN CONTENT -->
+  <main class="p-6 space-y-10">
 
-                <div style="padding: 0 20px; margin-bottom: 10px; font-size: 12px; font-weight: bold; color: var(--g-green);">SELEZIONA CLASSE</div>
-                <div class="fleet-scroll">
-                    <div class="car-card selected" onclick="selectCar(this, 'business', 150)">
-                        <span class="car-icon">🚗</span>
-                        <div class="car-name">Business Class</div>
-                        <div class="car-price">€ 150</div>
-                    </div>
-                    <div class="car-card" onclick="selectCar(this, 'van', 220)">
-                        <span class="car-icon">🚐</span>
-                        <div class="car-name">Luxury Van</div>
-                        <div class="car-price">€ 220</div>
-                    </div>
-                </div>
-            </div>
+    <!-- BOOKING STATUS -->
+    <section class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
+      <h2 class="text-xl font-serif mb-2">Richiesta Inviata</h2>
+      <p class="text-sand">Il sistema sta assegnando il tuo driver.</p>
 
-            <div class="bottom-action">
-                <button class="btn-main" onclick="bookRide()">
-                    <span>CONFERMA PRENOTAZIONE</span>
-                    <i data-lucide="arrow-right"></i>
-                </button>
-            </div>
+      <div class="mt-4 p-4 bg-black border border-zinc-700 rounded-lg">
+        <p class="text-sm text-sand">ID PRENOTAZIONE</p>
+        <p class="text-2xl font-mono text-gold mt-1">72FB14ED</p>
+      </div>
+    </section>
+
+    <!-- SIGNATURE EXPERIENCE -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">Signature Experience 2.0</h2>
+      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
+        <p class="text-sand mb-4">
+          La tua esperienza sarà personalizzata in base alle tue preferenze.
+        </p>
+        <button class="w-full py-3 bg-gold text-black rounded-lg font-medium hover:bg-pearl transition">
+          Visualizza Dettagli
+        </button>
+      </div>
+    </section>
+
+    <!-- MEMBERSHIP -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">Membership</h2>
+      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
+        <p class="text-sand mb-4">Livello attuale: <span class="text-gold">Gold</span></p>
+        <button class="w-full py-3 border border-gold text-gold rounded-lg hover:bg-gold hover:text-black transition">
+          Vedi Vantaggi
+        </button>
+      </div>
+    </section>
+
+    <!-- MARKETPLACE -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">Experience Marketplace</h2>
+      <div class="space-y-4">
+
+        <div class="bg-zinc-900 p-5 rounded-xl border border-zinc-700">
+          <h3 class="text-lg font-serif">Sunset Experience</h3>
+          <p class="text-sand text-sm mt-1">Un tramonto cinematografico sul Mediterraneo.</p>
         </div>
 
-        <div id="tripView">
-            <div class="map-bg"></div>
-            
-            <div class="driver-sheet">
-                <div style="text-align: center;">
-                    <div style="width: 60px; height: 60px; background: #e8f5e9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
-                        <i data-lucide="check" style="color: var(--g-green); width: 30px; height: 30px;"></i>
-                    </div>
-                    <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">Richiesta Inviata</h2>
-                    <p style="color: #666; font-size: 14px;">Il sistema sta assegnando il tuo driver.</p>
-                    
-                    <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px; border: 1px solid #eee;">
-                        <div style="font-size: 10px; font-weight: bold; color: #aaa; uppercase">ID PRENOTAZIONE</div>
-                        <div id="bookingIdDisplay" style="font-family: monospace; font-size: 18px; font-weight: bold; color: var(--g-green);">---</div>
-                    </div>
-
-                    <button onclick="location.reload()" style="margin-top: 20px; width: 100%; padding: 15px; background: var(--text-main); color: white; border: none; border-radius: 12px; font-weight: bold;">
-                        Nuova Prenotazione
-                    </button>
-                </div>
-            </div>
+        <div class="bg-zinc-900 p-5 rounded-xl border border-zinc-700">
+          <h3 class="text-lg font-serif">Heritage Tour</h3>
+          <p class="text-sand text-sm mt-1">Un viaggio nella storia e nella cultura siciliana.</p>
         </div>
 
-    </div>
+      </div>
+    </section>
 
-    <script>
-        lucide.createIcons();
+    <!-- WORLD -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">GIORIZZ World</h2>
+      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
+        <p class="text-sand mb-4">Esplora le città GIORIZZ nel mondo.</p>
+        <button class="w-full py-3 border border-sand text-sand rounded-lg hover:bg-sand hover:text-black transition">
+          Scopri le Destinazioni
+        </button>
+      </div>
+    </section>
 
-        // --- CONFIGURAZIONE REALE ---
-        const SUPABASE_URL = 'https://ysgebcbptgjlpbgnlcjt.supabase.co';
-        // Chiave 'Legacy anon' corretta (inizia con eyJ...)
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZ2ViY2JwdGdqbHBiZ25sY2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5OTMzNTUsImV4cCI6MjA4NTU2OTM1NX0.R-M89T_wNR-JvY2wtFRl4BDau63kl5Ko_8yYLSngB2M';
-        
-        const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  </main>
 
-        let selectedVehicle = 'business';
-        let selectedPrice = 150;
+  <!-- FOOTER -->
+  <footer class="text-center py-6 text-sand text-sm">
+    © 2026 GIORIZZ Luxury Mobility Platform
+  </footer>
 
-        function selectCar(el, type, price) {
-            document.querySelectorAll('.car-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            selectedVehicle = type;
-            selectedPrice = price;
-        }
-
-        async function bookRide() {
-            const pickup = document.getElementById('pickup').value;
-            const dropoff = document.getElementById('dropoff').value;
-            const btn = document.querySelector('.btn-main');
-
-            if(!dropoff) { alert("Per favore, inserisci una destinazione."); return; }
-
-            // Loading state
-            btn.innerHTML = "ELABORAZIONE...";
-            btn.style.opacity = "0.7";
-            btn.disabled = true;
-
-            // Scrittura nel DB
-            const { data, error } = await db
-                .from('bookings')
-                .insert([{ 
-                    pickup_address: pickup,
-                    dropoff_address: dropoff,
-                    vehicle_type: selectedVehicle,
-                    price: selectedPrice,
-                    status: 'pending' // Importante: così l'autista la vede
-                }])
-                .select();
-
-            if (error) {
-                console.error(error);
-                alert("Errore: " + error.message);
-                btn.innerHTML = "RIPROVA";
-                btn.disabled = false;
-                btn.style.opacity = "1";
-            } else {
-                // Successo
-                const booking = data[0];
-                document.getElementById('bookingView').style.display = 'none';
-                document.getElementById('tripView').style.display = 'flex';
-                document.getElementById('bookingIdDisplay').innerText = booking.id.split('-')[0].toUpperCase(); // Mostra solo l'inizio dell'ID
-            }
-        }
-    </script>
 </body>
 </html>
