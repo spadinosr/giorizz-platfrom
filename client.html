@@ -13,7 +13,7 @@
         :root {
             --g-green: #00382B;
             --g-gold: #C5A065;
-            --g-bg: #F4F4F5; /* zinc-100 */
+            --g-bg: #F4F4F5;
             --white: #ffffff;
             --text-main: #18181b;
             --text-muted: #a1a1aa;
@@ -31,7 +31,6 @@
             justify-content: center;
         }
 
-        /* DEVICE FRAME (Per mobile look) */
         .app-container {
             width: 100%;
             max-width: 450px;
@@ -77,14 +76,13 @@
         }
         .tab.active { color: var(--g-green); border-color: var(--g-gold); }
 
-        /* BOOKING CARD */
+        /* BOOKING WIDGET */
         .booking-widget {
             margin: 20px; padding: 20px;
             background: var(--white); border: 1px solid #f0f0f0;
             border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
             position: relative; overflow: hidden;
         }
-        /* Decorazione sfocata */
         .decoration {
             position: absolute; top: -20px; right: -20px; width: 100px; height: 100px;
             background: #FDF6E3; border-radius: 50%; filter: blur(40px); z-index: 0;
@@ -101,6 +99,7 @@
         .dot.pickup { background: var(--g-green); box-shadow: 0 0 0 4px #E8F5E9; }
         .dot.dropoff { background: var(--g-gold); border-radius: 2px; box-shadow: 0 0 0 4px #FFF8E1; }
 
+        .input-text { flex: 1; }
         .input-text label { display: block; font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
         .input-text input {
             border: none; background: transparent; width: 100%; font-size: 14px;
@@ -110,7 +109,7 @@
         /* FLEET */
         .fleet-scroll {
             display: flex; overflow-x: auto; gap: 15px; padding: 0 20px 20px 20px;
-            scrollbar-width: none; /* Hide scrollbar */
+            scrollbar-width: none;
         }
         .car-card {
             min-width: 140px; background: var(--white); border: 1px solid #f0f0f0;
@@ -122,7 +121,7 @@
         .car-name { font-size: 12px; font-weight: bold; }
         .car-price { font-size: 14px; font-weight: bold; color: var(--g-green); margin-top: 5px; }
 
-        /* BOTTOM CTA */
+        /* BUTTON */
         .bottom-action {
             position: absolute; bottom: 0; left: 0; right: 0;
             padding: 30px 20px;
@@ -138,7 +137,7 @@
         }
         .btn-main:active { transform: scale(0.98); }
 
-        /* --- MAP VIEW (TRACKING) --- */
+        /* MAP VIEW */
         #tripView {
             display: none; height: 100%; flex-direction: column; background: #E5E5E5; position: relative;
         }
@@ -147,11 +146,6 @@
             background-image: radial-gradient(#ccc 1px, transparent 1px);
             background-size: 20px 20px;
         }
-        /* CSS Art Roads */
-        .road { position: absolute; background: white; border: 1px solid #ccc; }
-        .road-1 { top: 0; bottom: 0; left: 30%; width: 40px; transform: skewX(-10deg); }
-        .road-2 { top: 40%; left: 0; right: 0; height: 30px; transform: rotate(-5deg); }
-
         .floating-status {
             position: absolute; top: 50px; left: 20px; right: 20px;
             display: flex; justify-content: space-between; z-index: 50;
@@ -162,31 +156,11 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         .pulse { width: 8px; height: 8px; background: #4ADE80; border-radius: 50%; animation: pulse 1.5s infinite; }
-
-        /* CAR ANIMATION */
-        .driver-car {
-            position: absolute; top: 60%; left: 10%;
-            font-size: 30px; background: white; border-radius: 50%;
-            width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 10;
-            transition: all 4s linear; /* Smooth movement */
-        }
-        .eta-badge {
-            position: absolute; bottom: -10px; background: black; color: white;
-            font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold;
-        }
-
-        /* DRIVER SHEET */
+        
         .driver-sheet {
             margin-top: auto; background: white; border-radius: 30px 30px 0 0;
             padding: 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); z-index: 50;
             animation: slideUp 0.5s ease;
-        }
-        .driver-info { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .driver-pic {
-            width: 60px; height: 60px; background: #f0f0f0; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 24px;
-            border: 2px solid white; box-shadow: 0 5px 10px rgba(0,0,0,0.1);
         }
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
@@ -201,10 +175,10 @@
         <div id="bookingView" style="height: 100%; display: flex; flex-direction: column;">
             <div class="header">
                 <div class="user-profile">
-                    <div class="avatar">A</div>
+                    <div class="avatar">C</div>
                     <div>
-                        <div class="greeting">Buonasera</div>
-                        <div class="username">Alessandro</div>
+                        <div class="greeting">Benvenuto</div>
+                        <div class="username">Cliente VIP</div>
                     </div>
                 </div>
                 <i data-lucide="menu"></i>
@@ -212,31 +186,23 @@
 
             <div style="overflow-y: auto; flex: 1; padding-bottom: 100px;">
                 <div class="hero">
-                    <h1>Where would you like<br><span>to go today?</span></h1>
-                </div>
-
-                <div class="tabs">
-                    <div class="tab active">Transfer</div>
-                    <div class="tab">Orario</div>
-                    <div class="tab">Elicottero</div>
+                    <h1>Prenota il tuo<br><span>Luxury Transfer</span></h1>
                 </div>
 
                 <div class="booking-widget">
                     <div class="decoration"></div>
-                    
                     <div class="input-group">
                         <div class="dot pickup"></div>
                         <div class="input-text">
                             <label>Ritiro</label>
-                            <input type="text" id="pickup" value="Posizione Attuale" placeholder="Dove ti trovi?">
+                            <input type="text" id="pickup" value="Grand Hotel, Milano">
                         </div>
                     </div>
-                    
                     <div class="input-group">
                         <div class="dot dropoff"></div>
                         <div class="input-text">
                             <label>Destinazione</label>
-                            <input type="text" id="dropoff" placeholder="Dove vuoi andare?">
+                            <input type="text" id="dropoff" placeholder="Inserisci destinazione...">
                         </div>
                     </div>
                 </div>
@@ -253,17 +219,12 @@
                         <div class="car-name">Luxury Van</div>
                         <div class="car-price">€ 220</div>
                     </div>
-                    <div class="car-card" onclick="selectCar(this, 'heli', 1200)">
-                        <span class="car-icon">🚁</span>
-                        <div class="car-name">Heli Transfer</div>
-                        <div class="car-price">€ 1200</div>
-                    </div>
                 </div>
             </div>
 
             <div class="bottom-action">
                 <button class="btn-main" onclick="bookRide()">
-                    <span>Prenota Corsa</span>
+                    <span>CONFERMA PRENOTAZIONE</span>
                     <i data-lucide="arrow-right"></i>
                 </button>
             </div>
@@ -271,40 +232,23 @@
 
         <div id="tripView">
             <div class="map-bg"></div>
-            <div class="road road-1"></div>
-            <div class="road road-2"></div>
-
+            
             <div class="floating-status">
-                <div style="background:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 5px 10px rgba(0,0,0,0.1);" onclick="location.reload()">
-                    <i data-lucide="x" color="black"></i>
-                </div>
                 <div class="status-pill">
                     <div class="pulse"></div>
-                    IN ARRIVO
+                    RICERCA DRIVER IN CORSO...
                 </div>
-            </div>
-
-            <div id="driverCar" class="driver-car">
-                🚐
-                <div class="eta-badge">8 min</div>
             </div>
 
             <div class="driver-sheet">
-                <div class="driver-info">
-                    <div class="driver-pic">👨🏻‍✈️</div>
-                    <div style="flex:1;">
-                        <div style="font-size:18px; font-weight:bold;">Giuseppe M.</div>
-                        <div style="font-size:12px; color:gray;">4.98 ★ • Mercedes V-Class</div>
-                        <div style="font-size:10px; background:#f0f0f0; display:inline-block; padding:2px 5px; border-radius:4px; margin-top:4px;">GA 992 LX</div>
+                <div style="text-align: center;">
+                    <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">Richiesta Inviata</h2>
+                    <p style="color: #666; font-size: 14px;">I nostri autisti stanno ricevendo la tua richiesta.</p>
+                    <div style="margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 10px;">
+                        <div style="font-size: 12px; font-weight: bold; color: var(--g-green);">ID PRENOTAZIONE</div>
+                        <div id="bookingIdDisplay" style="font-family: monospace; font-size: 16px;">---</div>
                     </div>
-                    <div style="width:50px; height:50px; background:var(--g-green); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white;">
-                        <i data-lucide="phone"></i>
-                    </div>
-                </div>
-
-                <div style="background:#f9f9f9; padding:15px; border-radius:12px; border-left: 2px solid var(--g-green);">
-                    <div style="font-size:10px; color:gray; font-weight:bold; margin-bottom:2px;">DESTINAZIONE</div>
-                    <div id="destDisplay" style="font-weight:bold; font-size:14px;">Aeroporto Catania</div>
+                    <button onclick="location.reload()" style="margin-top: 20px; width: 100%; padding: 15px; background: #eee; border: none; border-radius: 12px; font-weight: bold;">Nuova Prenotazione</button>
                 </div>
             </div>
         </div>
@@ -312,14 +256,15 @@
     </div>
 
     <script>
-        // Inizializza Icone
         lucide.createIcons();
 
-        // --- CONFIGURAZIONE SUPABASE ---
-        // ⚠️ INSERISCI QUI I TUOI DATI SE VUOI CHE FUNZIONI DAVVERO CON L'AUTISTA
-        const SUPABASE_URL = 'INCOLLA_QUI_IL_TUO_URL';
-        const SUPABASE_KEY = 'INCOLLA_QUI_LA_TUA_CHIAVE';
+        // --- I TUOI DATI SUPABASE (INSERITI) ---
+        const SUPABASE_URL = 'https://ysgebcbptgjlpbgnlcjt.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_vWLK2XVCNfki5wrkDEpBCQ_XCsjERhe';
         
+        // Inizializza Client
+        const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         let selectedVehicle = 'business';
         let selectedPrice = 150;
 
@@ -337,38 +282,41 @@
 
             if(!dropoff) { alert("Inserisci una destinazione!"); return; }
 
-            // Effetto Caricamento
+            // UI Loading
             const originalText = btn.innerHTML;
-            btn.innerHTML = "Ricerca Driver...";
+            btn.innerHTML = "Invio al sistema...";
             btn.style.opacity = "0.7";
+            btn.disabled = true;
 
-            // --- QUI COLLEGHEREMO SUPABASE ---
-            // const { data, error } = await supabase.from('bookings').insert([...])
-            
-            // SIMULAZIONE SUCCESSO (Per Demo Grafica)
-            setTimeout(() => {
-                // Cambia Vista
+            // --- INVIO REALE A SUPABASE ---
+            const { data, error } = await db
+                .from('bookings')
+                .insert([
+                    { 
+                        pickup_address: pickup,
+                        dropoff_address: dropoff,
+                        vehicle_type: selectedVehicle,
+                        price: selectedPrice,
+                        status: 'pending',
+                        pax: 2, // Default
+                        luggage: 2 // Default
+                    }
+                ])
+                .select();
+
+            if (error) {
+                console.error('Errore:', error);
+                alert("Errore nell'invio: " + error.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.style.opacity = "1";
+            } else {
+                // Successo!
+                const newBooking = data[0];
                 document.getElementById('bookingView').style.display = 'none';
                 document.getElementById('tripView').style.display = 'flex';
-                document.getElementById('destDisplay').innerText = dropoff;
-
-                // Avvia Animazione Auto
-                startCarAnimation();
-            }, 1500);
-        }
-
-        function startCarAnimation() {
-            const car = document.getElementById('driverCar');
-            // Muove la macchina dopo un po'
-            setTimeout(() => {
-                car.style.top = "40%";
-                car.style.left = "40%";
-            }, 500);
-            
-            setTimeout(() => {
-                car.style.top = "30%";
-                car.style.left = "70%";
-            }, 3000);
+                document.getElementById('bookingIdDisplay').innerText = newBooking.id;
+            }
         }
     </script>
 </body>
