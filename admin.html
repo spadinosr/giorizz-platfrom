@@ -1,178 +1,127 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giorizz HQ</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GIORIZZ — HQ Admin</title>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        giorizz: { green: '#00382B', gold: '#C5A065', bg: '#F4F4F5' }
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
-                }
-            }
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AUREA UI -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: "#D4AF37",
+            night: "#0A1A2F",
+            sand: "#E8DCC3",
+            pearl: "#F8F8F8"
+          },
+          fontFamily: {
+            serif: ["Playfair Display", "serif"],
+            sans: ["Inter", "sans-serif"]
+          }
         }
-    </script>
+      }
+    };
+  </script>
 </head>
-<body class="flex h-screen overflow-hidden bg-zinc-50">
 
-    <aside class="w-64 bg-[#050505] flex flex-col border-r border-zinc-800 text-white">
-        <div class="p-6">
-            <h1 class="text-xl font-extrabold tracking-widest">GIORIZZ<span class="text-giorizz-gold">.</span></h1>
-            <div class="text-[10px] text-zinc-500 mt-1 uppercase tracking-wider">Live Control Room</div>
+<body class="bg-black text-pearl font-sans">
+
+  <!-- HEADER -->
+  <header class="p-6 text-center border-b border-zinc-800">
+    <h1 class="text-3xl font-serif">HQ Admin</h1>
+    <p class="text-sand text-sm mt-1">Pannello di controllo GIORIZZ</p>
+  </header>
+
+  <!-- MAIN -->
+  <main class="p-6 space-y-10">
+
+    <!-- OPS DASHBOARD -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">Operazioni</h2>
+      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700 space-y-4">
+
+        <div class="flex justify-between">
+          <span class="text-sand">Corse attive</span>
+          <span class="text-gold font-medium" id="active-rides">0</span>
         </div>
-        <nav class="flex-1 px-4 space-y-2 text-sm font-medium text-zinc-400">
-            <div class="p-3 bg-white/10 text-white rounded-lg cursor-pointer flex items-center gap-3">
-                <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
-            </div>
-            <div class="p-3 hover:bg-white/5 rounded-lg cursor-pointer flex items-center gap-3">
-                <i data-lucide="users" class="w-4 h-4"></i> Drivers
-            </div>
-            <div class="p-3 hover:bg-white/5 rounded-lg cursor-pointer flex items-center gap-3">
-                <i data-lucide="settings" class="w-4 h-4"></i> Settings
-            </div>
-        </nav>
-        <div class="p-4 border-t border-zinc-800">
-            <div class="flex items-center gap-2 text-xs">
-                <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                <span class="text-emerald-500 font-bold">DB CONNECTED</span>
-            </div>
+
+        <div class="flex justify-between">
+          <span class="text-sand">Driver disponibili</span>
+          <span class="text-gold font-medium" id="available-drivers">0</span>
         </div>
-    </aside>
 
-    <main class="flex-1 flex flex-col">
-        
-        <header class="h-16 bg-white border-b border-zinc-200 flex justify-between items-center px-8 shadow-sm">
-            <h2 class="font-bold text-zinc-800">Panoramica Giornaliera</h2>
-            <button onclick="fetchBookings()" class="p-2 bg-zinc-100 rounded-full hover:bg-zinc-200 transition">
-                <i data-lucide="refresh-cw" class="w-4 h-4 text-zinc-600"></i>
-            </button>
-        </header>
+        <button class="w-full py-3 bg-gold text-black rounded-lg font-medium hover:bg-pearl transition">
+          Visualizza Dettagli
+        </button>
+      </div>
+    </section>
 
-        <div class="p-8 flex-1 overflow-y-auto">
-            
-            <div class="grid grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-xl border border-zinc-100 shadow-sm">
-                    <div class="text-xs text-zinc-400 font-bold uppercase">Incasso Stimato</div>
-                    <div class="text-2xl font-bold text-zinc-900 mt-1" id="totalRevenue">€ 0</div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-zinc-100 shadow-sm">
-                    <div class="text-xs text-zinc-400 font-bold uppercase">Corse Totali</div>
-                    <div class="text-2xl font-bold text-zinc-900 mt-1" id="totalRides">0</div>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-zinc-100 shadow-sm">
-                    <div class="text-xs text-zinc-400 font-bold uppercase">Stato Flotta</div>
-                    <div class="text-2xl font-bold text-giorizz-green mt-1">ATTIVA</div>
-                </div>
-            </div>
+    <!-- CRM -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">Clienti</h2>
+      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
+        <p class="text-sand mb-4">Gestione profili, preferenze e storico clienti.</p>
+        <button class="w-full py-3 border border-gold text-gold rounded-lg hover:bg-gold hover:text-black transition">
+          Apri CRM
+        </button>
+      </div>
+    </section>
 
-            <div class="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
-                <div class="p-5 border-b border-zinc-100 flex justify-between items-center">
-                    <h3 class="font-bold text-zinc-800">Prenotazioni in Tempo Reale</h3>
-                    <span class="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold">LIVE DATA</span>
-                </div>
-                <table class="w-full text-left">
-                    <thead class="bg-zinc-50 text-zinc-500 text-[10px] uppercase font-bold">
-                        <tr>
-                            <th class="p-4">Data / Ora</th>
-                            <th class="p-4">Tratta (Ritiro ➝ Destinazione)</th>
-                            <th class="p-4">Veicolo</th>
-                            <th class="p-4">Prezzo</th>
-                            <th class="p-4">Stato</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-sm divide-y divide-zinc-100" id="bookingTable">
-                        <tr>
-                            <td colspan="5" class="p-8 text-center text-zinc-400">Caricamento dati dal satellite...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <!-- MARKETPLACE -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">Experience Marketplace</h2>
+      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
+        <p class="text-sand mb-4">Gestisci esperienze, categorie e partner.</p>
+        <button class="w-full py-3 border border-sand text-sand rounded-lg hover:bg-sand hover:text-black transition">
+          Gestisci Marketplace
+        </button>
+      </div>
+    </section>
 
-        </div>
-    </main>
+    <!-- WORLD -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">GIORIZZ World</h2>
+      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
+        <p class="text-sand mb-4">Città attive, esperienze globali, partner internazionali.</p>
+        <button class="w-full py-3 border border-pearl text-pearl rounded-lg hover:bg-pearl hover:text-black transition">
+          Apri World Panel
+        </button>
+      </div>
+    </section>
 
-    <script>
-        lucide.createIcons();
+    <!-- AI BRAIN -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">AI Brain</h2>
+      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
+        <p class="text-sand mb-4">Insight, predizioni e ottimizzazioni strategiche.</p>
+        <button class="w-full py-3 bg-gold text-black rounded-lg font-medium hover:bg-pearl transition">
+          Visualizza Insight
+        </button>
+      </div>
+    </section>
 
-        // --- COLLEGAMENTO VERO ---
-        const SUPABASE_URL = 'https://ysgebcbptgjlpbgnlcjt.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_vWLK2XVCNfki5wrkDEpBCQ_XCsjERhe';
-        const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <!-- SECURITY -->
+    <section>
+      <h2 class="text-xl font-serif mb-3">Sicurezza</h2>
+      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
+        <p class="text-sand mb-4">Protocolli, audit log e gestione accessi.</p>
+        <button class="w-full py-3 border border-red-500 text-red-500 rounded-lg hover:bg-red-500 hover:text-black transition">
+          Apri Sicurezza
+        </button>
+      </div>
+    </section>
 
-        // Funzione per scaricare i dati veri
-        async function fetchBookings() {
-            const { data, error } = await db
-                .from('bookings')
-                .select('*')
-                .order('created_at', { ascending: false }); // Le più recenti in alto
+  </main>
 
-            if (error) {
-                console.error(error);
-                alert("Errore connessione DB");
-            } else {
-                renderTable(data);
-                updateStats(data);
-            }
-        }
+  <!-- FOOTER -->
+  <footer class="text-center py-6 text-sand text-sm">
+    © 2026 GIORIZZ Luxury Mobility Platform
+  </footer>
 
-        function renderTable(bookings) {
-            const tbody = document.getElementById('bookingTable');
-            tbody.innerHTML = '';
-
-            if(bookings.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-zinc-400">Nessuna prenotazione trovata.</td></tr>';
-                return;
-            }
-
-            bookings.forEach(b => {
-                // Formatta data
-                const date = new Date(b.created_at).toLocaleString('it-IT', { hour: '2-digit', minute:'2-digit', day:'numeric', month:'short' });
-                
-                // Colore Stato
-                let badgeClass = 'bg-zinc-100 text-zinc-600';
-                if(b.status === 'pending') badgeClass = 'bg-amber-50 text-amber-700 border border-amber-200';
-                if(b.status === 'assigned') badgeClass = 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold animate-pulse';
-
-                const html = `
-                <tr class="hover:bg-zinc-50 transition group">
-                    <td class="p-4 font-mono text-xs text-zinc-500">${date}</td>
-                    <td class="p-4">
-                        <div class="font-bold text-zinc-900">${b.pickup_address || 'N/D'}</div>
-                        <div class="text-xs text-zinc-400">➝ ${b.dropoff_address || 'N/D'}</div>
-                    </td>
-                    <td class="p-4"><span class="uppercase text-[10px] font-bold tracking-wider">${b.vehicle_type}</span></td>
-                    <td class="p-4 font-bold text-zinc-800">€ ${b.price}</td>
-                    <td class="p-4">
-                        <span class="px-3 py-1 rounded-full text-[10px] uppercase tracking-wide ${badgeClass}">
-                            ${b.status === 'assigned' ? 'IN CORSO' : b.status}
-                        </span>
-                    </td>
-                </tr>
-                `;
-                tbody.innerHTML += html;
-            });
-        }
-
-        function updateStats(data) {
-            // Conta totale soldi
-            const total = data.reduce((acc, curr) => acc + (curr.price || 0), 0);
-            document.getElementById('totalRevenue').innerText = '€ ' + total;
-            document.getElementById('totalRides').innerText = data.length;
-        }
-
-        // Avvia aggiornamento automatico ogni 5 secondi
-        fetchBookings();
-        setInterval(fetchBookings, 5000);
-
-    </script>
 </body>
 </html>
