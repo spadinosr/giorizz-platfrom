@@ -1,113 +1,70 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giorizz Mobility Ecosystem</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GIORIZZ — Luxury Mobility Ecosystem</title>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        giorizz: { green: '#00382B', gold: '#C5A065', black: '#050505' }
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
-                }
-            }
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AUREA UI Custom Theme -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: "#D4AF37",
+            night: "#0A1A2F",
+            sand: "#E8DCC3",
+            pearl: "#F8F8F8"
+          },
+          fontFamily: {
+            serif: ["Playfair Display", "serif"],
+            sans: ["Inter", "sans-serif"]
+          }
         }
-    </script>
-    <style>
-        body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-        .glass-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-        }
-    </style>
+      }
+    };
+  </script>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
 
-    <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-giorizz-green opacity-20 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-giorizz-green opacity-10 rounded-full blur-[120px]"></div>
-    </div>
+<body class="bg-black text-pearl font-sans">
 
-    <div class="text-center mb-12 animate-in fade-in slide-in-from-bottom duration-700">
-        <div class="inline-block mb-4 px-3 py-1 rounded-full border border-green-900 bg-green-900/20 text-green-400 text-[10px] font-bold tracking-widest uppercase">
-            System Online • v2.0
-        </div>
-        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-2">
-            GIORIZZ<span class="text-giorizz-gold">.</span>
-        </h1>
-        <p class="text-zinc-500 text-sm md:text-base tracking-wide uppercase">Luxury Mobility Platform</p>
-    </div>
+  <!-- HERO -->
+  <section class="relative h-screen flex items-center justify-center">
+    <img 
+      src="https://images.unsplash.com/photo-1502877338535-766e1452684a"
+      class="absolute inset-0 w-full h-full object-cover opacity-30"
+    />
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
+    <div class="relative text-center px-6">
+      <h1 class="text-5xl font-serif text-pearl mb-4">
+        GIORIZZ
+      </h1>
+      <p class="text-lg text-sand max-w-xl mx-auto">
+        Luxury Mobility Ecosystem.  
+        Eleganza, tecnologia e ospitalità mediterranea.
+      </p>
 
-        <a href="client.html" class="group relative bg-white text-black p-8 rounded-2xl shadow-2xl hover:shadow-white/20 transition-all duration-300 transform hover:-translate-y-1">
-            <div class="absolute top-4 right-4 bg-black/5 p-2 rounded-full">
-                <i data-lucide="arrow-up-right" class="w-5 h-5 text-black"></i>
-            </div>
-            <div class="mb-6 bg-black/5 w-14 h-14 rounded-full flex items-center justify-center">
-                <i data-lucide="smartphone" class="w-7 h-7 text-black"></i>
-            </div>
-            <h2 class="text-2xl font-bold mb-2">Prenota Corsa</h2>
-            <p class="text-sm text-zinc-600 font-medium">Accesso Clienti VIP</p>
-            <div class="mt-6 flex items-center text-xs font-bold uppercase tracking-wider text-black">
-                Entra <i data-lucide="chevron-right" class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1"></i>
-            </div>
+      <div class="mt-10 flex flex-col md:flex-row gap-4 justify-center">
+        <a href="client.html" class="px-6 py-3 bg-gold text-black rounded-lg font-medium hover:bg-pearl transition">
+          Client VIP
         </a>
-
-        <a href="driver.html" class="group glass-card p-8 rounded-2xl relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                <i data-lucide="steering-wheel" class="w-24 h-24"></i>
-            </div>
-            <div class="mb-6 bg-giorizz-green/20 w-14 h-14 rounded-full flex items-center justify-center border border-giorizz-green/30">
-                <i data-lucide="car" class="w-7 h-7 text-emerald-400"></i>
-            </div>
-            <h2 class="text-2xl font-bold mb-2 text-white">Driver App</h2>
-            <p class="text-sm text-zinc-400">Portale Autisti & Flotta</p>
-            <div class="mt-6 flex items-center text-xs font-bold uppercase tracking-wider text-emerald-400">
-                Accesso Partner <i data-lucide="chevron-right" class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1"></i>
-            </div>
+        <a href="driver.html" class="px-6 py-3 border border-gold text-gold rounded-lg font-medium hover:bg-gold hover:text-black transition">
+          Driver Pro
         </a>
-
-        <a href="admin.html" class="group glass-card p-8 rounded-2xl border-zinc-800">
-            <div class="mb-6 bg-zinc-800/50 w-14 h-14 rounded-full flex items-center justify-center border border-zinc-700">
-                <i data-lucide="layout-dashboard" class="w-7 h-7 text-zinc-400"></i>
-            </div>
-            <h2 class="text-2xl font-bold mb-2 text-white">HQ Admin</h2>
-            <p class="text-sm text-zinc-500">Control Room & Dispatch</p>
-            <div class="mt-6 flex items-center text-xs font-bold uppercase tracking-wider text-zinc-500 group-hover:text-white transition-colors">
-                Gestione <i data-lucide="lock" class="w-3 h-3 ml-2"></i>
-            </div>
+        <a href="admin.html" class="px-6 py-3 border border-sand text-sand rounded-lg font-medium hover:bg-sand hover:text-black transition">
+          HQ Admin
         </a>
-
+      </div>
     </div>
+  </section>
 
-    <div class="mt-16 text-center">
-        <div class="flex items-center justify-center gap-6 mb-4 opacity-30">
-            <i data-lucide="shield-check" class="w-5 h-5"></i>
-            <i data-lucide="globe" class="w-5 h-5"></i>
-            <i data-lucide="wifi" class="w-5 h-5"></i>
-        </div>
-        <p class="text-[10px] text-zinc-600 uppercase tracking-[0.2em]">
-            Giorizz Luxury Mobility System © 2026
-        </p>
-    </div>
+  <!-- FOOTER -->
+  <footer class="text-center py-6 text-sand text-sm">
+    © 2026 GIORIZZ Luxury Mobility Platform
+  </footer>
 
-    <script>
-        lucide.createIcons();
-    </script>
 </body>
 </html>
