@@ -62,3 +62,60 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giorizz Luxury Hub</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .logo { font-size: 30px; font-weight: bold; letter-spacing: 3px; margin-bottom: 40px; text-transform: uppercase; }
+        .logo span { color: #004D40; }
+        
+        .btn-portal {
+            display: block;
+            width: 260px;
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: 0.3s;
+            border: 1px solid #333;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        /* Colori differenziati per ruolo */
+        .client { background: #fff; color: #000; border: 1px solid #fff; } /* Bianco per Cliente */
+        .driver { background: #004D40; color: #fff; border: 1px solid #004D40; } /* Verde per Driver */
+        .admin { background: #111; color: #666; } /* Scuro per Admin */
+
+        .footer { margin-top: 50px; font-size: 10px; color: #444; }
+    </style>
+</head>
+<body>
+
+    <div class="logo">GIORIZZ<span>.</span></div>
+
+    <a href="client.html" class="btn-portal client">PRENOTA (CLIENTE)</a>
+    <a href="driver.html" class="btn-portal driver">APP AUTISTA (DRIVER)</a>
+    <a href="admin.html" class="btn-portal admin">DASHBOARD (UFFICIO)</a>
+
+    <div class="footer">Giorizz Luxury Mobility System</div>
+
+</body>
+</html>
