@@ -225,11 +225,10 @@
     <script>
         lucide.createIcons();
 
-        // --- CONFIGURAZIONE ---
+        // --- CONFIGURAZIONE REALE ---
         const SUPABASE_URL = 'https://ysgebcbptgjlpbgnlcjt.supabase.co';
-        
-        // ⚠️ INCOLLA QUI SOTTO LA TUA CHIAVE 'anon' CHE INIZIA CON 'eyJ...' ⚠️
-        const SUPABASE_KEY = 'INCOLLA_QUI_LA_TUA_CHIAVE_eyJ...'; 
+        // Chiave 'Legacy anon' corretta (inizia con eyJ...)
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlzZ2ViY2JwdGdqbHBiZ25sY2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk5OTMzNTUsImV4cCI6MjA4NTU2OTM1NX0.R-M89T_wNR-JvY2wtFRl4BDau63kl5Ko_8yYLSngB2M';
         
         const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
