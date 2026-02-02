@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Prenota Giorizz</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .header-client {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 20px;
+        }
+        .header-client h1 { font-size: 20px; letter-spacing: 2px; margin: 0; text-transform: uppercase; }
+        .header-client span { color: #004D40; }
+
+        .form-group { margin-bottom: 20px; }
+        .label { font-size: 12px; color: #888; margin-bottom: 8px; display: block; text-transform: uppercase; }
+        
+        .input-box {
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .input-box:focus { border-color: #004D40; outline: none; }
+
+        .vehicle-selector {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .vehicle-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            min-width: 140px;
+            padding: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        
+        .vehicle-card.selected { border-color: #004D40; background: #001a15; }
+        .v-name { font-size: 14px; font-weight: bold; margin-bottom: 5px; display: block; }
+        .v-desc { font-size: 10px; color: #888; display: block; margin-bottom: 10px;}
+        .v-price { font-size: 16px; color: #fff; font-weight: bold; }
+
+        .bottom-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #111;
+            border-top: 1px solid #333;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-price { display: flex; flex-direction: column; }
+        .total-label { font-size: 10px; color: #888; text-transform: uppercase; }
+        .total-amount { font-size: 24px; font-weight: bold; color: #fff; }
+
+        .btn-book {
+            background: #004D40;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-client">
+        <h1>Giorizz<span>.</span> Booking</h1>
+    </div>
+
+    <div class="form-group">
+        <label class="label">Punto di Ritiro</label>
+        <input type="text" class="input-box" placeholder="Es. Aeroporto Malpensa" id="pickup">
+    </div>
+
+    <div class="form-group">
+        <label class="label">Destinazione</label>
+        <input type="text" class="input-box" placeholder="Es. Hotel Principe di Savoia" id="dropoff">
+    </div>
+
+    <div class="form-group">
+        <label class="label">Scegli la tua classe</label>
+        <div class="vehicle-selector">
+            <div class="vehicle-card selected" onclick="selectVehicle(this, 150)">
+                <span class="v-name">BUSINESS CLASS</span>
+                <span class="v-desc">Mercedes Classe E/S<br>Max 3 Pax</span>
+                <span class="v-price">€ 150</span>
+            </div>
+            <div class="vehicle-card" onclick="selectVehicle(this, 220)">
+                <span class="v-name">LUXURY VAN</span>
+                <span class="v-desc">Mercedes Classe V<br>Max 7 Pax</span>
+                <span class="v-price">€ 220</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-bar">
+        <div class="total-price">
+            <span class="total-label">Totale Stimato</span>
+            <span class="total-amount" id="displayPrice">€ 150</span>
+        </div>
+        <button class="btn-book" onclick="alert('Funzione in arrivo con il Database!')">PRENOTA ORA</button>
+    </div>
+
+    <script>
+        function selectVehicle(element, price) {
+            document.querySelectorAll('.vehicle-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('displayPrice').innerText = '€ ' + price;
+        }
+    </script>
+</body>
+</html>
