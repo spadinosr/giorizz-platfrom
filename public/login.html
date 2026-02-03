@@ -2,21 +2,83 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-    <title>Login - GIORIZZ</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="scripts/supabase.js"></script>
-    <script src="scripts/auth.js"></script>
-    <script src="scripts/login.js"></script>
-  </head>
-<body>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — GIORIZZ</title>
 
-  <h2>Accedi</h2>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  <input id="email" type="email" placeholder="Email">
-  <input id="password" type="password" placeholder="Password">
-  <button id="loginBtn">Login</button>
+  <!-- Theme -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: "#D4AF37",
+            night: "#0A1A2F",
+            sand: "#E8DCC3",
+            pearl: "#F8F8F8"
+          },
+          fontFamily: {
+            serif: ["Playfair Display", "serif"],
+            sans: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
 
+<body class="bg-black text-pearl font-sans min-h-screen flex items-center justify-center">
+
+  <!-- Background -->
+  <div class="absolute inset-0">
+    <img 
+      src="https://images.unsplash.com/photo-1502877338535-766e1452684a"
+      class="w-full h-full object-cover opacity-20"
+    />
+  </div>
+
+  <!-- Login Card -->
+  <div class="relative bg-night/80 backdrop-blur-xl p-10 rounded-2xl border border-gold w-full max-w-md shadow-xl">
+
+    <h1 class="text-4xl font-serif text-gold text-center mb-6">
+      Benvenuto in GIORIZZ
+    </h1>
+
+    <p class="text-center text-sand mb-8">
+      Accedi al tuo spazio riservato
+    </p>
+
+    <div class="space-y-4">
+      <input 
+        id="email"
+        type="email"
+        placeholder="Email"
+        class="w-full p-3 rounded-lg bg-black/40 border border-sand text-pearl focus:outline-none"
+      />
+
+      <input 
+        id="password"
+        type="password"
+        placeholder="Password"
+        class="w-full p-3 rounded-lg bg-black/40 border border-sand text-pearl focus:outline-none"
+      />
+
+      <button 
+        id="loginBtn"
+        class="w-full py-3 bg-gold text-black font-medium rounded-lg hover:bg-pearl transition"
+      >
+        Accedi
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="scripts/supabase.js"></script>
+  <script src="scripts/auth.js"></script>
   <script src="scripts/login.js"></script>
 
 </body>
