@@ -10,6 +10,7 @@ async function logout() {
   window.location.href = "index.html";
 }
 
+// Protezione pagine in base al ruolo
 async function requireRole(allowedRoles) {
   const session = await checkSession();
 
