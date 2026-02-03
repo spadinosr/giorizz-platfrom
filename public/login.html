@@ -30,24 +30,16 @@
 
 </head>
 
-<body class="bg-black text-pearl font-sans min-h-screen flex items-center justify-center">
+<body class="bg-pearl text-night font-sans min-h-screen flex items-center justify-center">
 
-  <!-- Background -->
-  <div class="absolute inset-0">
-    <img 
-      src="https://images.unsplash.com/photo-1502877338535-766e1452684a"
-      class="w-full h-full object-cover opacity-20"
-    />
-  </div>
+  <!-- Card -->
+  <div class="relative bg-white/70 backdrop-blur-xl p-10 rounded-2xl border border-gold w-full max-w-md shadow-xl">
 
-  <!-- Login Card -->
-  <div class="relative bg-night/80 backdrop-blur-xl p-10 rounded-2xl border border-gold w-full max-w-md shadow-xl">
-
-    <h1 class="text-4xl font-serif text-gold text-center mb-6">
+    <h1 class="text-4xl font-serif text-emerald text-center mb-6">
       Benvenuto in GIORIZZ
     </h1>
 
-    <p class="text-center text-sand mb-8">
+    <p class="text-center text-night/70 mb-8">
       Accedi al tuo spazio riservato
     </p>
 
@@ -56,19 +48,19 @@
         id="email"
         type="email"
         placeholder="Email"
-        class="w-full p-3 rounded-lg bg-black/40 border border-sand text-pearl focus:outline-none"
+        class="w-full p-3 rounded-lg bg-pearl border border-emerald/40 text-night focus:outline-none"
       />
 
       <input 
         id="password"
         type="password"
         placeholder="Password"
-        class="w-full p-3 rounded-lg bg-black/40 border border-sand text-pearl focus:outline-none"
+        class="w-full p-3 rounded-lg bg-pearl border border-emerald/40 text-night focus:outline-none"
       />
 
       <button 
         id="loginBtn"
-        class="w-full py-3 bg-gold text-black font-medium rounded-lg hover:bg-pearl transition"
+        class="w-full py-3 bg-emerald text-pearl font-medium rounded-lg hover:bg-gold hover:text-night transition"
       >
         Accedi
       </button>
@@ -83,4 +75,5 @@
   <script src="scripts/login.js"></script>
 
 </body>
+
 </html>
