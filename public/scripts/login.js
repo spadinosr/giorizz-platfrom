@@ -19,22 +19,28 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
     return;
   }
 
-  // Recupera il ruolo dalla tabella user_roles
-  const { data: roles } = await supabaseClient
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", data.user.id)
-    .single();
-
-  if (!roles) {
-    alert("Nessun ruolo assegnato");
+  const user = data.user;
+  if (!user) {
+    alert("Nessun utente trovato dopo il login");
     return;
   }
 
-  const role = roles.role;
+  const { data: roleRow, error: roleError } = await supabaseClient
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", user.id)
+    .single();
 
-  // Redirect in base al ruolo
+  if (roleError || !roleRow) {
+    alert("Nessun ruolo assegnato a questo utente");
+    return;
+  }
+
+  const role = roleRow.role;
+
   if (role === "client") window.location.href = "client.html";
-  if (role === "driver") window.location.href = "driver.html";
-  if (role === "admin") window.location.href = "admin.html";
+  else if (role === "driver") window.location.href = "driver.html";
+  else if (role === "admin") window.location.href = "admin.html";
+  else alert("Ruolo non riconosciuto: " + role);
 });
+;
