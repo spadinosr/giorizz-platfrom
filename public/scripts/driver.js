@@ -1,24 +1,20 @@
-// Carica stato driver all'avvio
+// scripts/driver.js
+
 document.addEventListener("DOMContentLoaded", async () => {
   const session = await checkSession();
   const userId = session.user.id;
 
-  // Recupera stato attuale
   const { data: statusRow } = await supabaseClient
     .from("driver_status")
     .select("status")
     .eq("user_id", userId)
     .single();
 
-  let currentStatus = statusRow ? statusRow.status : "offline";
-
+  const currentStatus = statusRow ? statusRow.status : "offline";
   updateStatusUI(currentStatus);
-
-  // Carica corse assegnate
   loadAssignedRides(userId);
 });
 
-// Aggiorna UI in base allo stato
 function updateStatusUI(status) {
   const label = document.getElementById("statusLabel");
   const button = document.getElementById("toggleStatus");
@@ -26,7 +22,7 @@ function updateStatusUI(status) {
   if (status === "online") {
     label.textContent = "Stato attuale: Online";
     button.textContent = "Vai Offline";
-    button.classList.remove("bg-emerald");
+    button.classList.remove("bg-emerald", "text-pearl");
     button.classList.add("bg-gold", "text-night");
   } else {
     label.textContent = "Stato attuale: Offline";
@@ -36,12 +32,10 @@ function updateStatusUI(status) {
   }
 }
 
-// Toggle stato driver
 document.getElementById("toggleStatus").addEventListener("click", async () => {
   const session = await checkSession();
   const userId = session.user.id;
 
-  // Recupera stato attuale
   const { data: statusRow } = await supabaseClient
     .from("driver_status")
     .select("status")
@@ -49,12 +43,8 @@ document.getElementById("toggleStatus").addEventListener("click", async () => {
     .single();
 
   let newStatus = "online";
+  if (statusRow && statusRow.status === "online") newStatus = "offline";
 
-  if (statusRow && statusRow.status === "online") {
-    newStatus = "offline";
-  }
-
-  // Aggiorna su Supabase
   await supabaseClient
     .from("driver_status")
     .upsert({
@@ -66,9 +56,8 @@ document.getElementById("toggleStatus").addEventListener("click", async () => {
   updateStatusUI(newStatus);
 });
 
-// Carica corse assegnate
 async function loadAssignedRides(driverId) {
-  const { data: rides, error } = await supabaseClient
+  const { data: rides } = await supabaseClient
     .from("bookings")
     .select("*")
     .eq("driver_id", driverId)
@@ -85,13 +74,28 @@ async function loadAssignedRides(driverId) {
   rides.forEach(ride => {
     const div = document.createElement("div");
     div.className = "p-4 bg-pearl border border-emerald/30 rounded-lg";
-
     div.innerHTML = `
       <p><strong>Partenza:</strong> ${ride.pickup}</p>
       <p><strong>Arrivo:</strong> ${ride.dropoff}</p>
       <p><strong>Stato:</strong> ${ride.status}</p>
     `;
-
     container.appendChild(div);
   });
 }
+
+// Realtime: aggiorna corse assegnate
+supabaseClient
+  .channel("driver-realtime")
+  .on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "bookings" },
+    async payload => {
+      const { data } = await supabaseClient.auth.getSession();
+      const session = data.session;
+      if (!session) return;
+      if (payload.new.driver_id === session.user.id) {
+        loadAssignedRides(session.user.id);
+      }
+    }
+  )
+  .subscribe();
