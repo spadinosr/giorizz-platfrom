@@ -1,43 +1,97 @@
-// DRIVER PRO — LOGICA BASE
+// Carica stato driver all'avvio
+document.addEventListener("DOMContentLoaded", async () => {
+  const session = await checkSession();
+  const userId = session.user.id;
 
-console.log("Driver Pro script caricato correttamente");
-checkSession().then(session => {
-    if (!session) {
-        console.log("Nessuna sessione attiva");
-        // In futuro potremo reindirizzare al login
-    } else {
-        console.log("Sessione attiva:", session);
-    }
+  // Recupera stato attuale
+  const { data: statusRow } = await supabaseClient
+    .from("driver_status")
+    .select("status")
+    .eq("user_id", userId)
+    .single();
+
+  let currentStatus = statusRow ? statusRow.status : "offline";
+
+  updateStatusUI(currentStatus);
+
+  // Carica corse assegnate
+  loadAssignedRides(userId);
 });
 
+// Aggiorna UI in base allo stato
+function updateStatusUI(status) {
+  const label = document.getElementById("statusLabel");
+  const button = document.getElementById("toggleStatus");
 
-checkSession().then(session => {
-    if (!session) {
-        console.log("Nessuna sessione attiva");
-    } else {
-        console.log("Sessione attiva:", session);
-    }
-});
-
-// Controllo sessione (in futuro potremo aggiungere login driver)
-checkSession().then(session => {
-  if (!session) {
-    console.log("Nessuna sessione attiva per il driver");
+  if (status === "online") {
+    label.textContent = "Stato attuale: Online";
+    button.textContent = "Vai Offline";
+    button.classList.remove("bg-emerald");
+    button.classList.add("bg-gold", "text-night");
   } else {
-    console.log("Sessione driver attiva:", session);
+    label.textContent = "Stato attuale: Offline";
+    button.textContent = "Vai Online";
+    button.classList.remove("bg-gold", "text-night");
+    button.classList.add("bg-emerald", "text-pearl");
   }
-});
-
-// Funzione iniziale della pagina Driver Pro
-function initDriverPage() {
-  console.log("Inizializzazione pagina Driver Pro...");
-
-  // Qui aggiungeremo:
-  // - caricamento corsa assegnata
-  // - protocolli Signature 2.0
-  // - checklist veicolo
-  // - stato driver
-  // - AI Driver Coach
 }
 
-initDriverPage();
+// Toggle stato driver
+document.getElementById("toggleStatus").addEventListener("click", async () => {
+  const session = await checkSession();
+  const userId = session.user.id;
+
+  // Recupera stato attuale
+  const { data: statusRow } = await supabaseClient
+    .from("driver_status")
+    .select("status")
+    .eq("user_id", userId)
+    .single();
+
+  let newStatus = "online";
+
+  if (statusRow && statusRow.status === "online") {
+    newStatus = "offline";
+  }
+
+  // Aggiorna su Supabase
+  await supabaseClient
+    .from("driver_status")
+    .upsert({
+      user_id: userId,
+      status: newStatus,
+      updated_at: new Date()
+    });
+
+  updateStatusUI(newStatus);
+});
+
+// Carica corse assegnate
+async function loadAssignedRides(driverId) {
+  const { data: rides, error } = await supabaseClient
+    .from("bookings")
+    .select("*")
+    .eq("driver_id", driverId)
+    .order("created_at", { ascending: false });
+
+  const container = document.getElementById("assignedRides");
+  container.innerHTML = "";
+
+  if (!rides || rides.length === 0) {
+    container.innerHTML = "<p>Nessuna corsa assegnata.</p>";
+    return;
+  }
+
+  rides.forEach(ride => {
+    const div = document.createElement("div");
+    div.className = "p-4 bg-pearl border border-emerald/30 rounded-lg";
+
+    div.innerHTML = `
+      <p><strong>Partenza:</strong> ${ride.pickup}</p>
+      <p><strong>Arrivo:</strong> ${ride.dropoff}</p>
+      <p><strong>Stato:</strong> ${ride.status}</p>
+    `;
+
+    container.appendChild(div);
+  });
+}
