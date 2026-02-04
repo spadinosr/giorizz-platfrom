@@ -1,24 +1,16 @@
-// Controllo sessione utente
+// scripts/auth.js
+
 async function checkSession() {
-  const { data } = await supabaseClient.auth.getSession();
+  const { data, error } = await supabaseClient.auth.getSession();
+  if (error || !data.session) {
+    window.location.href = "login.html";
+    throw new Error("No session");
+  }
   return data.session;
 }
 
-// Logout
-async function logout() {
-  await supabaseClient.auth.signOut();
-  window.location.href = "index.html";
-}
-
-// Protezione pagine in base al ruolo
 async function requireRole(allowedRoles) {
   const session = await checkSession();
-
-  if (!session || !session.user) {
-    window.location.href = "login.html";
-    return;
-  }
-
   const userId = session.user.id;
 
   const { data: roleRow, error } = await supabaseClient
@@ -27,14 +19,13 @@ async function requireRole(allowedRoles) {
     .eq("user_id", userId)
     .single();
 
-  if (error || !roleRow) {
+  if (error || !roleRow || !allowedRoles.includes(roleRow.role)) {
     window.location.href = "login.html";
-    return;
+    throw new Error("Unauthorized");
   }
+}
 
-  const role = roleRow.role;
-
-  if (!allowedRoles.includes(role)) {
-    window.location.href = "login.html";
-  }
+async function logout() {
+  await supabaseClient.auth.signOut();
+  window.location.href = "login.html";
 }
