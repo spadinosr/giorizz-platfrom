@@ -31,3 +31,11 @@ function initClientPage() {
 }
 
 initClientPage();
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="scripts/supabase.js"></script>
+<script src="scripts/auth.js"></script>
+<script src="scripts/client.js"></script>
+
+<script>
+  requireRole(["client"]);
+</script>
