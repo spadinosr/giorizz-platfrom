@@ -1,15 +1,14 @@
-// Caricamento iniziale
+// scripts/admin.js
+
 document.addEventListener("DOMContentLoaded", async () => {
   await loadClients();
   await loadDrivers();
   await loadBookings();
 });
 
-/* ---------------------------
-   CLIENTI
----------------------------- */
+/* CLIENTI */
 async function loadClients() {
-  const { data: clients, error } = await supabaseClient
+  const { data: clients } = await supabaseClient
     .from("user_roles")
     .select("user_id, role")
     .eq("role", "client");
@@ -24,10 +23,8 @@ async function loadClients() {
 
   for (const c of clients) {
     const user = await getUserInfo(c.user_id);
-
     const div = document.createElement("div");
     div.className = "p-4 bg-pearl border border-emerald/30 rounded-lg";
-
     div.innerHTML = `
       <p><strong>Email:</strong> ${user.email}</p>
       <button 
@@ -37,16 +34,13 @@ async function loadClients() {
         Elimina Cliente
       </button>
     `;
-
     container.appendChild(div);
   }
 }
 
-/* ---------------------------
-   DRIVER
----------------------------- */
+/* DRIVER */
 async function loadDrivers() {
-  const { data: drivers, error } = await supabaseClient
+  const { data: drivers } = await supabaseClient
     .from("user_roles")
     .select("user_id, role")
     .eq("role", "driver");
@@ -61,10 +55,8 @@ async function loadDrivers() {
 
   for (const d of drivers) {
     const user = await getUserInfo(d.user_id);
-
     const div = document.createElement("div");
     div.className = "p-4 bg-pearl border border-emerald/30 rounded-lg";
-
     div.innerHTML = `
       <p><strong>Email:</strong> ${user.email}</p>
       <button 
@@ -74,16 +66,13 @@ async function loadDrivers() {
         Elimina Driver
       </button>
     `;
-
     container.appendChild(div);
   }
 }
 
-/* ---------------------------
-   PRENOTAZIONI
----------------------------- */
+/* PRENOTAZIONI */
 async function loadBookings() {
-  const { data: bookings, error } = await supabaseClient
+  const { data: bookings } = await supabaseClient
     .from("bookings")
     .select("*")
     .order("created_at", { ascending: false });
@@ -96,16 +85,15 @@ async function loadBookings() {
     return;
   }
 
-  for (const b of bookings) {
+  bookings.forEach(b => {
     const div = document.createElement("div");
     div.className = "p-4 bg-pearl border border-emerald/30 rounded-lg";
-
     div.innerHTML = `
       <p><strong>Partenza:</strong> ${b.pickup}</p>
       <p><strong>Arrivo:</strong> ${b.dropoff}</p>
       <p><strong>Stato:</strong> ${b.status}</p>
 
-      <label class="block mt-2 text-sm">Assegna Driver:</label>
+      <label class="block mt-2 text-sm">Assegna Driver (driver_id):</label>
       <input 
         id="driver-${b.id}" 
         class="w-full p-2 bg-white border border-emerald/40 rounded"
@@ -126,22 +114,16 @@ async function loadBookings() {
         Elimina Prenotazione
       </button>
     `;
-
     container.appendChild(div);
-  }
+  });
 }
 
-/* ---------------------------
-   FUNZIONI DI SUPPORTO
----------------------------- */
-
-// Recupera info utente da Supabase Auth
+/* SUPPORTO */
 async function getUserInfo(userId) {
   const { data } = await supabaseClient.auth.admin.getUserById(userId);
   return data.user;
 }
 
-// Elimina utente
 async function deleteUser(userId) {
   if (!confirm("Sei sicuro di voler eliminare questo utente?")) return;
 
@@ -152,7 +134,6 @@ async function deleteUser(userId) {
   loadDrivers();
 }
 
-// Elimina prenotazione
 async function deleteBooking(id) {
   if (!confirm("Eliminare questa prenotazione?")) return;
 
@@ -160,10 +141,8 @@ async function deleteBooking(id) {
   loadBookings();
 }
 
-// Assegna driver a prenotazione
 async function assignDriver(bookingId) {
   const driverId = document.getElementById(`driver-${bookingId}`).value.trim();
-
   if (!driverId) {
     alert("Inserisci un driver_id valido");
     return;
@@ -177,3 +156,24 @@ async function assignDriver(bookingId) {
   alert("Driver assegnato con successo");
   loadBookings();
 }
+
+/* REALTIME ADMIN */
+supabaseClient
+  .channel("admin-realtime")
+  .on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "bookings" },
+    payload => {
+      console.log("Aggiornamento prenotazioni:", payload);
+      loadBookings();
+    }
+  )
+  .on(
+    "postgres_changes",
+    { event: "*", schema: "public", table: "driver_status" },
+    payload => {
+      console.log("Aggiornamento driver:", payload);
+      loadDrivers();
+    }
+  )
+  .subscribe();
