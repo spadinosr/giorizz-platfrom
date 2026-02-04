@@ -1,142 +1,93 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GIORIZZ — HQ Admin</title>
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- AUREA UI -->
-<script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          gold: "#D4AF37",
-          emerald: "#046C4E",
-          pearl: "#F7F4EF",
-          night: "#0A1A2F"
-        },
-        fontFamily: {
-          serif: ["Playfair Display", "serif"],
-          sans: ["Inter", "sans-serif"]
+  <!-- Theme -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: "#D4AF37",
+            emerald: "#046C4E",
+            pearl: "#F7F4EF",
+            night: "#0A1A2F"
+          },
+          fontFamily: {
+            serif: ["Playfair Display", "serif"],
+            sans: ["Inter", "sans-serif"]
+          }
         }
       }
-    }
-  };
-</script>
-
+    };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="scripts/supabase.js"></script>
-<script src="scripts/auth.js"></script>
-<script src="scripts/client.js"></script>
-<script>
-  requireRole(["admin"]);
-</script>
-
 </head>
-<script src="scripts/supabase.js"></script>
-<script src="scripts/auth.js"></script>
-<script src="scripts/admin.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script src="scripts/supabase.js"></script>
 
-<body class="bg-black text-pearl font-sans">
+<body class="bg-pearl text-night font-sans min-h-screen">
 
-  <!-- HEADER -->
-  <header class="p-6 text-center border-b border-zinc-800">
-    <h1 class="text-3xl font-serif">HQ Admin</h1>
-    <p class="text-sand text-sm mt-1">Pannello di controllo GIORIZZ</p>
-  </header>
+  <!-- NAVBAR -->
+  <nav class="flex justify-between items-center px-6 py-4 bg-emerald text-pearl shadow-lg">
+    <h1 class="text-2xl font-serif">GIORIZZ — HQ Admin</h1>
+    <button onclick="logout()" class="px-4 py-2 border border-gold text-gold rounded-lg hover:bg-gold hover:text-night transition">
+      Logout
+    </button>
+  </nav>
 
-  <!-- MAIN -->
-  <main class="p-6 space-y-10">
+  <!-- MAIN CONTENT -->
+  <main class="p-6 space-y-10 max-w-6xl mx-auto">
 
-    <!-- OPS DASHBOARD -->
+    <!-- WELCOME -->
     <section>
-      <h2 class="text-xl font-serif mb-3">Operazioni</h2>
-      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700 space-y-4">
+      <h2 class="text-3xl font-serif text-emerald mb-2">Pannello di Controllo</h2>
+      <p class="text-night/70">Gestisci clienti, driver e prenotazioni con precisione.</p>
+    </section>
 
-        <div class="flex justify-between">
-          <span class="text-sand">Corse attive</span>
-          <span class="text-gold font-medium" id="active-rides">0</span>
+    <!-- GRID -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- CLIENTI -->
+      <div class="bg-white p-6 rounded-xl border border-gold shadow-md">
+        <h3 class="text-xl font-serif text-emerald mb-4">Clienti</h3>
+        <div id="clientsList" class="space-y-3 text-night/80">
+          <!-- Caricamento clienti -->
         </div>
+      </div>
 
-        <div class="flex justify-between">
-          <span class="text-sand">Driver disponibili</span>
-          <span class="text-gold font-medium" id="available-drivers">0</span>
+      <!-- DRIVER -->
+      <div class="bg-white p-6 rounded-xl border border-gold shadow-md">
+        <h3 class="text-xl font-serif text-emerald mb-4">Driver</h3>
+        <div id="driversList" class="space-y-3 text-night/80">
+          <!-- Caricamento driver -->
         </div>
-
-        <button class="w-full py-3 bg-gold text-black rounded-lg font-medium hover:bg-pearl transition">
-          Visualizza Dettagli
-        </button>
       </div>
-    </section>
 
-    <!-- CRM -->
-    <section>
-      <h2 class="text-xl font-serif mb-3">Clienti</h2>
-      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
-        <p class="text-sand mb-4">Gestione profili, preferenze e storico clienti.</p>
-        <button class="w-full py-3 border border-gold text-gold rounded-lg hover:bg-gold hover:text-black transition">
-          Apri CRM
-        </button>
+      <!-- PRENOTAZIONI -->
+      <div class="bg-white p-6 rounded-xl border border-gold shadow-md">
+        <h3 class="text-xl font-serif text-emerald mb-4">Prenotazioni</h3>
+        <div id="adminBookings" class="space-y-3 text-night/80">
+          <!-- Caricamento prenotazioni -->
+        </div>
       </div>
-    </section>
 
-    <!-- MARKETPLACE -->
-    <section>
-      <h2 class="text-xl font-serif mb-3">Experience Marketplace</h2>
-      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
-        <p class="text-sand mb-4">Gestisci esperienze, categorie e partner.</p>
-        <button class="w-full py-3 border border-sand text-sand rounded-lg hover:bg-sand hover:text-black transition">
-          Gestisci Marketplace
-        </button>
-      </div>
-    </section>
-
-    <!-- WORLD -->
-    <section>
-      <h2 class="text-xl font-serif mb-3">GIORIZZ World</h2>
-      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
-        <p class="text-sand mb-4">Città attive, esperienze globali, partner internazionali.</p>
-        <button class="w-full py-3 border border-pearl text-pearl rounded-lg hover:bg-pearl hover:text-black transition">
-          Apri World Panel
-        </button>
-      </div>
-    </section>
-
-    <!-- AI BRAIN -->
-    <section>
-      <h2 class="text-xl font-serif mb-3">AI Brain</h2>
-      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
-        <p class="text-sand mb-4">Insight, predizioni e ottimizzazioni strategiche.</p>
-        <button class="w-full py-3 bg-gold text-black rounded-lg font-medium hover:bg-pearl transition">
-          Visualizza Insight
-        </button>
-      </div>
-    </section>
-
-    <!-- SECURITY -->
-    <section>
-      <h2 class="text-xl font-serif mb-3">Sicurezza</h2>
-      <div class="bg-zinc-900 p-6 rounded-xl border border-zinc-700">
-        <p class="text-sand mb-4">Protocolli, audit log e gestione accessi.</p>
-        <button class="w-full py-3 border border-red-500 text-red-500 rounded-lg hover:bg-red-500 hover:text-black transition">
-          Apri Sicurezza
-        </button>
-      </div>
     </section>
 
   </main>
 
-  <!-- FOOTER -->
-  <footer class="text-center py-6 text-sand text-sm">
-    © 2026 GIORIZZ Luxury Mobility Platform
-  </footer>
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="scripts/supabase.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/admin.js"></script>
+
+  <script>
+    requireRole(["admin"]);
+  </script>
 
 </body>
 </html>
