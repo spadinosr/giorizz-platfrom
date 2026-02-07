@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- HOME -->
+  <url><loc>https://giorizz.it/</loc></url>
+
+  <!-- HUBS -->
+  <url><loc>https://giorizz.it/airports/</loc></url>
+  <url><loc>https://giorizz.it/city-to-city/</loc></url>
+  <url><loc>https://giorizz.it/ports/</loc></url>
+  <url><loc>https://giorizz.it/stations/</loc></url>
+  <url><loc>https://giorizz.it/coverage/</loc></url>
+
+  <!-- TOURS -->
+  <url><loc>https://giorizz.it/tours/sicily-luxury-tours.html</loc></url>
+
+  <!-- AIRPORTS -->
+  <url><loc>https://giorizz.it/airports/cta-catania-airport-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/airports/pmo-palermo-airport-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/airports/tps-trapani-airport-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/airports/ciy-comiso-airport-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/airports/lmp-lampedusa-airport-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/airports/pnl-pantelleria-airport-transfer.html</loc></url>
+
+  <!-- CITY TO CITY -->
+  <url><loc>https://giorizz.it/city-to-city/catania-taormina.html</loc></url>
+  <url><loc>https://giorizz.it/city-to-city/catania-siracusa.html</loc></url>
+  <url><loc>https://giorizz.it/city-to-city/catania-noto.html</loc></url>
+  <url><loc>https://giorizz.it/city-to-city/siracusa-noto.html</loc></url>
+  <url><loc>https://giorizz.it/city-to-city/palermo-taormina.html</loc></url>
+  <url><loc>https://giorizz.it/city-to-city/palermo-cefalu.html</loc></url>
+
+  <!-- PORTS -->
+  <url><loc>https://giorizz.it/ports/palermo-port-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/ports/catania-port-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/ports/messina-port-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/ports/milazzo-port-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/ports/trapani-port-transfer.html</loc></url>
+
+  <!-- STATIONS -->
+  <url><loc>https://giorizz.it/stations/catania-centrale-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/stations/palermo-centrale-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/stations/messina-centrale-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/stations/siracusa-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/stations/taormina-giardini-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/stations/ragusa-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/stations/modica-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/stations/noto-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/stations/cefalu-transfer.html</loc></url>
+  <url><loc>https://giorizz.it/stations/trapani-transfer.html</loc></url>
+
+</urlset>
